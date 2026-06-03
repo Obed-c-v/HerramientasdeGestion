@@ -1,0 +1,221 @@
+:host {
+    display: block;
+    height: 100vh;
+    overflow: hidden;
+    font-family: var(--font-family);
+    background-color: var(--bg-main);
+}
+
+.dashboard-layout {
+    display: flex;
+    height: 100%;
+    transition: var(--transition-normal);
+    background-color: var(--bg-main);
+}
+
+.main-container {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    position: relative;
+}
+
+/* Base Responsive */
+@media (max-width: 768px) {
+    .top-header {
+        padding: 0 16px;
+    }
+
+    .user-name {
+        display: none;
+        /* Hide name on mobile to save space */
+    }
+
+    .user-profile {
+        padding: 4px;
+    }
+}
+
+@media (max-width: 480px) {
+    .page-title {
+        font-size: 16px;
+    }
+
+    .header-tools {
+        gap: 12px;
+    }
+}
+
+.top-header {
+    height: 70px;
+    background-color: var(--card-bg);
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 32px;
+    flex-shrink: 0;
+    z-index: 10;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.hamburger-btn {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition-fast);
+}
+
+.hamburger-btn:hover {
+    background-color: var(--hover-bg);
+    color: var(--text-primary);
+}
+
+.page-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0;
+    letter-spacing: -0.02em;
+}
+
+.header-tools {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.header-preferences {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding-right: 16px;
+    border-right: 1px solid var(--border-color);
+}
+
+.lang-selector-mini select {
+    background: var(--bg-main);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: 4px 8px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-primary);
+    cursor: pointer;
+    outline: none;
+    transition: var(--transition-fast);
+}
+
+.lang-selector-mini select:hover {
+    border-color: var(--primary);
+}
+
+.theme-toggle-compact {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px;
+    border-radius: 8px;
+    transition: var(--transition-fast);
+    color: var(--text-secondary);
+}
+
+.theme-toggle-compact:hover {
+    background-color: var(--hover-bg);
+    color: var(--primary);
+}
+
+.theme-toggle-compact input {
+    display: none;
+}
+
+.toggle-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.notification-btn {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    position: relative;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 50%;
+    transition: var(--transition-fast);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.notification-btn:hover {
+    background-color: var(--hover-bg);
+    color: var(--text-primary);
+}
+
+.notification-badge {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    width: 8px;
+    height: 8px;
+    background-color: var(--danger);
+    border-radius: 50%;
+    border: 2px solid var(--card-bg);
+}
+
+.user-profile {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 6px 12px;
+    border-radius: 30px;
+    transition: var(--transition-fast);
+    border: 1px solid transparent;
+}
+
+.user-profile:hover {
+    background-color: var(--card-bg);
+    border-color: var(--border-color);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+}
+
+.user-avatar {
+    width: 32px;
+    height: 32px;
+    background-color: #cbd5e1;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 600;
+    color: #475569;
+    border: 2px solid var(--card-bg);
+}
+
+.user-name {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.content-scroll {
+    flex-grow: 1;
+    overflow-y: auto;
+    position: relative;
+}

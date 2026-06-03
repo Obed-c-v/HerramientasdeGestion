@@ -1,0 +1,26 @@
+# Dependencies
+node_modules/
+
+# Angular
+.angular/
+dist/
+
+# Env
+.env
+
+# Logs
+*.log
+logs.txt
+
+# Zip
+*.zip
+
+# Tokens
+last-token.txt
+
+# Uploads
+uploads/avatars/
+
+# OS
+.DS_Store
+Thumbs.db

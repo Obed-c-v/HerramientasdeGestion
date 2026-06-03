@@ -1,0 +1,339 @@
+:host {
+    display: block;
+    padding: 0;
+}
+
+.alerts-container {
+    padding: 32px;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+/* Header */
+.alerts-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 32px;
+}
+
+.alerts-header h1 {
+    font-size: 24px;
+    color: var(--text-primary);
+    margin: 0 0 8px 0;
+    font-weight: 600;
+}
+
+.alerts-header p {
+    color: var(--text-secondary);
+    margin: 0;
+    font-size: 14px;
+}
+
+.header-stats {
+    display: flex;
+    gap: 24px;
+}
+
+.stat-mini {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.stat-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: 4px;
+    letter-spacing: 0.05em;
+}
+
+.stat-val {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text-primary);
+    letter-spacing: -0.02em;
+}
+
+.stat-mini.critical .stat-val {
+    color: var(--danger);
+}
+
+/* Filters */
+.filters-bar {
+    background: var(--card-bg);
+    padding: 20px 24px;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    display: flex;
+    gap: 32px;
+    margin-bottom: 24px;
+    align-items: center;
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.filter-group label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.filter-chips {
+    display: flex;
+    gap: 8px;
+}
+
+.chip {
+    padding: 6px 16px;
+    border-radius: 20px;
+    border: 1px solid var(--border-color);
+    background: var(--card-bg);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: var(--transition-fast);
+}
+
+.chip:hover {
+    border-color: var(--text-secondary);
+    color: var(--text-primary);
+}
+
+.chip.active {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+}
+
+.filter-select {
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    font-size: 14px;
+    color: var(--text-primary);
+    background-color: var(--bg-main);
+    min-width: 180px;
+    transition: var(--transition-fast);
+}
+
+.filter-select:focus {
+    border-color: var(--primary);
+    outline: none;
+}
+
+/* Alerts List */
+.alerts-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.alert-card {
+    background: var(--card-bg);
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    display: flex;
+    overflow: hidden;
+    transition: var(--transition-normal);
+}
+
+.alert-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+}
+
+.alert-side-indicator {
+    width: 6px;
+    flex-shrink: 0;
+}
+
+.alert-card.high .alert-side-indicator {
+    background-color: var(--danger);
+}
+
+.alert-card.medium .alert-side-indicator {
+    background-color: #f59e0b;
+}
+
+.alert-card.low .alert-side-indicator {
+    background-color: var(--primary);
+}
+
+.alert-body {
+    flex-grow: 1;
+    padding: 24px;
+}
+
+.alert-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 16px;
+}
+
+.patient-id {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--primary);
+    letter-spacing: 0.05em;
+    display: block;
+    margin-bottom: 2px;
+}
+
+.patient-name {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.alert-meta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 6px;
+}
+
+.alert-date {
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+
+.alert-level-badge {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: 4px 8px;
+    border-radius: 4px;
+}
+
+.alert-level-badge.high {
+    background: #fef2f2;
+    color: var(--danger);
+}
+
+.alert-level-badge.medium {
+    background: #fffbeb;
+    color: #d97706;
+}
+
+.alert-level-badge.low {
+    background: #eff6ff;
+    color: var(--primary);
+}
+
+.clinical-reason {
+    background: var(--bg-main);
+    padding: 16px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    border: 1px solid var(--border-color);
+}
+
+.clinical-reason strong {
+    display: block;
+    font-size: 11px;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+    letter-spacing: 0.05em;
+}
+
+.clinical-reason p {
+    margin: 0;
+    font-size: 14px;
+    color: var(--text-primary);
+    line-height: 1.5;
+}
+
+.alert-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid var(--border-color);
+    padding-top: 20px;
+}
+
+.status-indicator {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--border-color);
+}
+
+/* Button handled globally, but ensuring correct size here */
+.btn-primary {
+    padding: 8px 16px;
+    font-size: 13px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .alerts-container {
+        padding: 16px;
+    }
+
+    .alerts-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+    }
+
+    .header-stats {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .filters-bar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 16px;
+        padding: 16px;
+    }
+
+    .filter-group label {
+        margin-bottom: 4px;
+    }
+
+    .filter-chips {
+        flex-wrap: wrap;
+    }
+
+    .alert-top {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .alert-meta {
+        align-items: flex-start;
+    }
+
+    .alert-actions {
+        flex-direction: column;
+        gap: 16px;
+        align-items: stretch;
+    }
+
+    .status-indicator {
+        justify-content: center;
+    }
+}

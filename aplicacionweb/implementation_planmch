@@ -1,0 +1,109 @@
+# Plan de Implementación Actualizado: Inteligencia Artificial en S-Park (Soporte Diagnóstico)
+
+Este plan ha sido refinado para alinearse con la visión clínica de **S-Park**: no diagnosticar binariamente de forma cerrada, sino servir como una **herramienta de soporte clínico y de decisión rápida para el especialista/neurólogo**. 
+
+Clasificaremos:
+1. **La Probabilidad de presentar indicadores compatibles con Parkinson** (0% a 100%).
+2. **El Nivel de Riesgo / Severidad de Progresión** (Bajo, Medio, Alto) basado en la escala estándar UPDRS (Unified Parkinson's Disease Rating Scale).
+
+Para lograr esto de forma robusta, **utilizaremos e integraremos ambos datasets** (`parkinsons.data` y `parkinsons_updrs.data`).
+
+---
+
+## 🔍 Análisis de Datos y Estrategia Multimodal (Dos Datasets)
+
+Para maximizar el valor académico y clínico del proyecto, entrenaremos **dos tipos de clasificadores** utilizando 3 algoritmos diferentes en cada uno:
+
+### 1. Modelo de Probabilidad de Indicadores Compatibles
+* **Dataset**: `parkinsons.data` (Oxford Dataset)
+* **Objetivo**: Determinar si las muestras de voz del paciente presentan perturbaciones de frecuencia y amplitud compatibles con patrones de Parkinson.
+* **Salida**: Probabilidad en porcentaje (0% - 100%) generada por las funciones `predict_proba` de los modelos.
+
+### 2. Modelo de Nivel de Riesgo / Severidad Clínica
+* **Dataset**: `parkinsons_updrs.data` (Telemonitoring Dataset)
+* **Transformación**: La escala UPDRS mide la severidad motora y funcional del paciente (de 0 a 176). Para transformarlo en un problema de clasificación útil para el neurólogo, discretizaremos el score `total_UPDRS` en **3 Niveles de Riesgo**:
+  * 🟢 **Riesgo Bajo / Leve**: `total_UPDRS <= 25` (Indicadores iniciales mínimos)
+  * 🟡 **Riesgo Medio / Moderado**: `25 < total_UPDRS <= 40` (Disfonía y fluctuación vocal media)
+  * 🔴 **Riesgo Alto / Severo**: `total_UPDRS > 40` (Marcado deterioro funcional y acústico)
+* **Objetivo**: Evaluar la severidad de los indicadores clínicos presentes en la voz para dar soporte rápido de priorización médica.
+
+---
+
+## 🤖 Algoritmos de Machine Learning a Evaluar
+
+En ambos datasets entrenaremos y compararemos los mismos 3 algoritmos de clasificación:
+
+1. **Regresión Logística / Regresión Softmax (Logistic/Softmax Regression)**: Excelente para clasificaciones lineales e interpretación directa de coeficientes probabilísticos.
+2. **Bosques Aleatorios (Random Forest Classifier)**: Algoritmo de ensamble no lineal robusto contra ruido acústico y que nos dirá exactamente qué características (Jitter, Shimmer, NHR, etc.) influyen más en el nivel de riesgo.
+3. **Máquina de Vectores de Soporte (SVM - SVC)**: Utiliza kernels para proyectar las características acústicas en hiperplanos de alta dimensión, ideal para separar los distintos niveles de severidad de forma precisa.
+
+---
+
+## 📊 Métricas de Evaluación por Caso
+
+* **Para el Modelo de Probabilidad (Clasificación Binaria)**:
+  * Exactitud (Accuracy), Precisión, Recall/Sensibilidad (crucial para no omitir riesgos), F1-Score, Curva ROC e Índice AUC-ROC, y Log Loss.
+* **Para el Modelo de Nivel de Riesgo (Clasificación Multiclase)**:
+  * Matriz de Confusión multiclase (Bajo vs Medio vs Alto), Macro/Micro Precision y Recall, F1-Score general, y Pérdida Logarítmica multiclase.
+
+---
+
+## 🏗️ Flujo de Integración en el Backend y Panel Web
+
+1. **Microservicio en Python Flask (Puerto 5000)**:
+   - Cargará los dos mejores modelos guardados (`best_probability_model.joblib` y `best_risk_model.joblib`).
+   - Endpoint `POST /api/predict`: Recibirá los datos de frecuencias acústicas.
+   - Retornará:
+     ```json
+     {
+       "probabilidad_compatibilidad": 84.7,
+       "nivel_riesgo": "Medio",
+       "nivel_riesgo_codigo": "MEDIO",
+       "total_updrs_estimado": 42.5,
+       "detalles_metricas": {
+         "jitter": 0.0064,
+         "shimmer": 0.0234
+       }
+     }
+     ```
+
+2. **Panel del Neurólogo (Express + Angular Web)**:
+   - Crearemos un **módulo de "Análisis de Voz IA"** dentro del expediente del paciente en el panel administrativo.
+   - El neurólogo podrá:
+     - Ingresar los parámetros de voz obtenidos en la consulta o simularlos con un clic.
+     - Ver un **Widget Visual de Diagnóstico de Soporte**:
+       - Un velocímetro de aguja que indica la probabilidad compatible (0-100%).
+       - Una tarjeta de alerta semáforo para el Nivel de Riesgo (Bajo 🟢, Medio 🟡, Alto 🔴).
+       - Una gráfica de barra horizontal con la comparación del rendimiento de los 3 modelos para demostrarle al neurólogo la validez científica del análisis.
+
+---
+
+## 🛠️ Plan de Trabajo y Siguiente Paso (Entrenamiento de uno en uno)
+
+Alineados con el enfoque paso a paso para fines de aprendizaje, el plan se divide en las siguientes etapas consecutivas:
+
+### Fase 1: Entrenamiento y Evaluación de Random Forest 🌲 (¡En curso!)
+* **Objetivo:** Crear un script dedicado `train_rf.py` para entrenar el modelo de Bosque Aleatorio en ambas tareas (Detección Binaria de Oxford y Nivel de Riesgo de UPDRS).
+* **Pasos detallados del script:**
+  1. **Carga y División:** Carga de los archivos limpios y división en subconjuntos de Entrenamiento ($80\%$) y Prueba ($20\%$).
+  2. **Escalamiento:** Aplicar `StandardScaler` (importante para mantener coherencia en futuras comparaciones).
+  3. **Entrenamiento:** Ajustar el modelo `RandomForestClassifier` y explicar sus hiperparámetros (n_estimators, max_depth, class_weight).
+  4. **Predicción y Métricas:** Obtener predicciones y calcular Accuracy, F1-Score, Confusion Matrix, y Log Loss.
+  5. **Análisis Clínico (Feature Importance):** Extraer qué biomarcadores acústicos son los que más influyen.
+  6. **Guardado:** Guardar los archivos de modelo en `ml/models/rf_probability.joblib` y `ml/models/rf_risk.joblib`.
+
+### Fase 2: Entrenamiento de SVM (Support Vector Machines) 📈
+* **Objetivo:** Crear `train_svm.py` para comparar el rendimiento con el bosque aleatorio usando un enfoque basado en hiperplanos.
+
+### Fase 3: Entrenamiento de Gradient Boosting y XGBoost 🚀
+* **Objetivo:** Crear `train_boosting.py` incorporando el boosting secuencial y la regularización avanzada.
+
+### Fase 4: Comparación Final y API 📊
+* **Objetivo:** Comparar los resultados acumulados, elegir los mejores para cada tarea y construir el endpoint en Flask.
+
+---
+
+## ❓ Preguntas Abiertas
+
+> [!NOTE]
+> 1. **Visualizaciones de Random Forest:** Durante la ejecución del entrenamiento, ¿te gustaría que guardemos la matriz de confusión y el gráfico de importancia de variables como imágenes PNG en la carpeta `ml/outputs/` para que las puedas ver manualmente en tu computadora?

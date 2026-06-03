@@ -1,0 +1,147 @@
+<div class="settings-container">
+    <div class="settings-card">
+        <header class="settings-header">
+            <h1>{{ settingsService.translate('professional_profile') }}</h1>
+            <p>{{ settingsService.translate('profile_desc') }}</p>
+        </header>
+
+        <!-- Inline Notification Banner -->
+        @if (notification()) {
+            <div class="notification-banner" [class.success]="notification()!.type === 'success'" [class.error]="notification()!.type === 'error'">
+                {{ notification()!.message }}
+            </div>
+        }
+
+        <section class="settings-section" [formGroup]="profileForm">
+            <h2 class="section-title">{{ settingsService.translate('profile_info') }}</h2>
+            <div class="profile-header-settings">
+                <div class="avatar-container">
+                    <!-- Show photo if available, otherwise show initials -->
+                    @if (avatarUrl()) {
+                        <img [src]="avatarUrl()!" alt="Avatar" class="avatar-large avatar-img">
+                    } @else {
+                        <div class="avatar-large">{{ initials }}</div>
+                    }
+                    <label class="btn-text-action" for="photoInput" style="cursor:pointer;">
+                        {{ settingsService.translate('change_photo') }}
+                    </label>
+                    <input id="photoInput" type="file" accept="image/*" style="display:none" (change)="onSelectPhoto($event)">
+                </div>
+            </div>
+
+            <div class="form-grid">
+                <!-- Nombre -->
+                <div class="form-group" [class.error]="profileForm.get('nombre')?.invalid && profileForm.get('nombre')?.touched">
+                    <label>Nombre</label>
+                    <input type="text" formControlName="nombre" placeholder="Nombre">
+                    @if (profileForm.get('nombre')?.invalid && profileForm.get('nombre')?.touched) {
+                        <span class="error-message">
+                            @if (profileForm.get('nombre')?.errors?.['required']) { {{ settingsService.translate('field_required') }} }
+                            @else if (profileForm.get('nombre')?.errors?.['hasHtml']) { {{ settingsService.translate('html_not_allowed') }} }
+                        </span>
+                    }
+                </div>
+
+                <!-- Apellido -->
+                <div class="form-group" [class.error]="profileForm.get('apellido')?.invalid && profileForm.get('apellido')?.touched">
+                    <label>Apellido</label>
+                    <input type="text" formControlName="apellido" placeholder="Apellido">
+                    @if (profileForm.get('apellido')?.invalid && profileForm.get('apellido')?.touched) {
+                        <span class="error-message">
+                            @if (profileForm.get('apellido')?.errors?.['required']) { {{ settingsService.translate('field_required') }} }
+                        </span>
+                    }
+                </div>
+
+                <!-- Email (read-only) -->
+                <div class="form-group">
+                    <label>{{ settingsService.translate('email') }}</label>
+                    <input type="email" formControlName="email" [placeholder]="settingsService.translate('email')">
+                </div>
+
+                <!-- Teléfono -->
+                <div class="form-group" [class.error]="profileForm.get('telefono')?.invalid && profileForm.get('telefono')?.touched">
+                    <label>{{ settingsService.translate('phone_number') }}</label>
+                    <input type="tel" formControlName="telefono" [placeholder]="settingsService.translate('phone_number')">
+                    @if (profileForm.get('telefono')?.invalid && profileForm.get('telefono')?.touched) {
+                        <span class="error-message">{{ settingsService.translate('invalid_phone_format') }}</span>
+                    }
+                </div>
+
+                <!-- Campos exclusivos de MÉDICO -->
+                @if (authService.isMedico()) {
+                    <div class="form-group">
+                        <label>{{ settingsService.translate('license_number') }}</label>
+                        <input type="text" formControlName="numero_licencia" placeholder="N/A">
+                    </div>
+                    <div class="form-group" [class.error]="profileForm.get('especialidad')?.invalid && profileForm.get('especialidad')?.touched">
+                        <label>{{ settingsService.translate('specialty_label') }}</label>
+                        <input type="text" formControlName="especialidad" [placeholder]="settingsService.translate('specialty_label')">
+                        @if (profileForm.get('especialidad')?.invalid && profileForm.get('especialidad')?.touched) {
+                            <span class="error-message">
+                                @if (profileForm.get('especialidad')?.errors?.['hasHtml']) { {{ settingsService.translate('html_not_allowed') }} }
+                                @else if (profileForm.get('especialidad')?.errors?.['hasNumbers']) { {{ settingsService.translate('no_numbers_allowed') }} }
+                            </span>
+                        }
+                    </div>
+                }
+            </div>
+            <div class="action-footer">
+                <button class="btn-primary" [disabled]="profileForm.invalid || savingProfile()" (click)="saveProfile()">
+                    {{ savingProfile() ? 'Guardando...' : settingsService.translate('save_changes') }}
+                </button>
+            </div>
+        </section>
+
+        <hr class="separator">
+
+        <!-- Security Section -->
+        <section class="settings-section" [formGroup]="passwordForm">
+            <h2 class="section-title">{{ settingsService.translate('security') }}</h2>
+            <div class="form-grid single-column">
+                <div class="form-group" [class.error]="passwordForm.get('currentPassword')?.invalid && passwordForm.get('currentPassword')?.touched">
+                    <label>{{ settingsService.translate('current_password') }}</label>
+                    <input type="password" formControlName="currentPassword" placeholder="••••••••">
+                    @if (passwordForm.get('currentPassword')?.invalid && passwordForm.get('currentPassword')?.touched) {
+                        <span class="error-message">{{ settingsService.translate('field_required') }}</span>
+                    }
+                </div>
+                <div class="form-group" [class.error]="passwordForm.get('newPassword')?.invalid && passwordForm.get('newPassword')?.touched">
+                    <label>{{ settingsService.translate('new_password') }}</label>
+                    <input type="password" formControlName="newPassword" placeholder="••••••••">
+                    @if (passwordForm.get('newPassword')?.invalid && passwordForm.get('newPassword')?.touched) {
+                        <span class="error-message">
+                            @if (passwordForm.get('newPassword')?.errors?.['required']) { {{ settingsService.translate('field_required') }} }
+                            @else if (passwordForm.get('newPassword')?.errors?.['minlength']) { {{ settingsService.translate('password_too_short') }} }
+                        </span>
+                    }
+                </div>
+                <div class="form-group" [class.error]="(passwordForm.get('confirmPassword')?.touched && passwordForm.errors?.['mismatch'])">
+                    <label>{{ settingsService.translate('confirm_password') }}</label>
+                    <input type="password" formControlName="confirmPassword" placeholder="••••••••">
+                    @if (passwordForm.get('confirmPassword')?.touched && passwordForm.errors?.['mismatch']) {
+                        <span class="error-message">{{ settingsService.translate('passwords_dont_match') }}</span>
+                    }
+                </div>
+            </div>
+            <div class="action-footer">
+                <button class="btn-primary" [disabled]="passwordForm.invalid || savingPassword()" (click)="changePassword()">
+                    {{ savingPassword() ? 'Guardando...' : settingsService.translate('change_password') }}
+                </button>
+            </div>
+        </section>
+
+        <hr class="separator">
+
+        <!-- Logout Section -->
+        <section class="settings-section">
+            <h2 class="section-title">Sesión</h2>
+            <div class="action-footer" style="justify-content: flex-start;">
+                <button class="btn-danger" (click)="logout()" style="background-color: #dc3545; color: white; padding: 0.75rem 1.5rem; border: none; border-radius: 8px; font-weight: 500; cursor: pointer;">
+                    Cerrar sesión
+                </button>
+            </div>
+        </section>
+    </div>
+</div>
+

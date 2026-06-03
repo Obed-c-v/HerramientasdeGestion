@@ -1,0 +1,49 @@
+=============================================================
+  S-PARK: UMBRALES DE SEVERIDAD Y NIVELES DE RIESGO IA (UPDRS)
+=============================================================
+
+Para clasificar el nivel de riesgo de severidad de la enfermedad de 
+Parkinson basándonos en la escala clínica unificada UPDRS (Unified 
+Parkinson's Disease Rating Scale), discretizamos el score 'total_UPDRS' 
+en tres niveles bien definidos.
+
+Aquí tienes los detalles de las dos aproximaciones:
+
+-------------------------------------------------------------
+1. NUEVA PROPUESTA BALANCEADA (IMPLEMENTADA Y OPTIMIZADA)
+-------------------------------------------------------------
+Estos nuevos cortes se basan en la distribución estadística real del 
+dataset (mediana = 27.5, percentil 75 = 36.4, máximo = 54.99). 
+Al ajustar los límites, garantizamos que haya suficientes muestras 
+en cada categoría para que el modelo pueda aprender e identificar 
+patrones críticos (especialmente casos severos).
+
+  🟢 RIESGO BAJO (Leve):
+     - Rango: total_UPDRS menor o igual a 25.
+     - Indicadores: Frecuencia de voz estable, disfonía mínima.
+     - Muestras en Dataset: 2,188 registros.
+
+  🟡 RIESGO MEDIO (Moderado):
+     - Rango: total_UPDRS mayor a 25 y menor o igual a 40.
+     - Indicadores: Leves fluctuaciones en jitter y shimmer, disfonía media.
+     - Muestras en Dataset: 2,681 registros.
+
+  🔴 RIESGO ALTO (Severo):
+     - Rango: total_UPDRS mayor a 40 (el máximo real es 54.99).
+     - Indicadores: Fluctuaciones agudas de frecuencia, shimmer y jitter elevados, HNR bajo.
+     - Muestras en Dataset: 1,006 registros.
+
+-------------------------------------------------------------
+2. PROPUESTA ANTERIOR (DESBALANCEADA - NO RECOMENDADA)
+-------------------------------------------------------------
+La propuesta teórica original provocaba que la clase de "Riesgo Alto" 
+quedara con 0 muestras, impidiendo que la IA aprendiera a detectarla.
+
+  🟢 RIESGO BAJO:  total_UPDRS <= 30  (3,341 registros)
+  🟡 RIESGO MEDIO: 30 < total_UPDRS <= 60  (2,534 registros)
+  🔴 RIESGO ALTO:  total_UPDRS > 60  (0 registros - Máximo real es 54.99)
+
+=============================================================
+✅ Recomendación: Conservar los nuevos umbrales (propuesta 1) 
+   para el entrenamiento de todos los modelos de S-Park.
+=============================================================

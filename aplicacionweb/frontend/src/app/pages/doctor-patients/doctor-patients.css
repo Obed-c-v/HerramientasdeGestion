@@ -1,0 +1,302 @@
+:host {
+    display: block;
+    padding: 20px 32px;
+    background-color: var(--bg-main);
+    min-height: calc(100vh - 70px);
+}
+
+.doctor-patients-page {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Header */
+.page-header {
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.back-btn {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 8px;
+    transition: var(--transition-fast);
+}
+
+.back-btn:hover {
+    background: var(--hover-bg);
+    color: var(--primary);
+}
+
+.header-title h1 {
+    font-size: 28px;
+    color: var(--text-primary);
+    margin: 0;
+}
+
+/* Card Grid */
+.doctors-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 24px;
+    margin-top: 20px;
+}
+
+.doctor-card {
+    background: var(--card-bg);
+    border-radius: 16px;
+    border: 1px solid var(--border-color);
+    padding: 24px;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    position: relative;
+    overflow: hidden;
+}
+
+.doctor-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 20px -8px rgba(0, 0, 0, 0.1);
+    border-color: var(--primary);
+}
+
+.card-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.avatar-lg {
+    width: 48px;
+    height: 48px;
+    background: var(--bg-main);
+    color: var(--primary);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.doctor-info h3 {
+    margin: 0;
+    font-size: 18px;
+    color: var(--text-primary);
+}
+
+.doctor-info p {
+    margin: 4px 0 0 0;
+    font-size: 14px;
+    color: var(--text-secondary);
+}
+
+.card-stats {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px;
+    background: var(--bg-main);
+    border-radius: 12px;
+}
+
+.stat-icon {
+    color: var(--primary);
+}
+
+.stat-text {
+    font-size: 14px;
+    color: var(--text-primary);
+    font-weight: 500;
+}
+
+.stat-label {
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-left: auto;
+}
+
+.view-btn {
+    width: 100%;
+    padding: 12px;
+    border-radius: 10px;
+    border: none;
+    background: var(--bg-main);
+    color: var(--text-primary);
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: var(--transition-fast);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.view-btn:hover {
+    background: var(--primary);
+    color: white;
+}
+
+/* Patient Table View */
+.table-view {
+    animation: fadeIn 0.3s ease;
+}
+
+.view-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.doctor-badge {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 16px;
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 30px;
+}
+
+.patients-card {
+    background: var(--card-bg);
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    overflow: hidden;
+}
+
+.table-container {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th {
+    text-align: left;
+    padding: 10px 16px;
+    background: var(--bg-main);
+    color: var(--text-secondary);
+    font-size: 12px;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+td {
+    padding: 8px 16px;
+    border-bottom: 1px solid var(--border-color);
+    font-size: 14px;
+    color: var(--text-primary);
+    transition: var(--transition-fast);
+}
+
+.patient-row:hover td {
+    background-color: var(--hover-bg);
+}
+
+.patient-row:hover {
+    box-shadow: inset 1px 0 0 var(--primary), inset -1px 0 0 var(--primary);
+}
+
+.patient-link {
+    text-decoration: none;
+    color: var(--primary);
+    font-weight: 600;
+}
+
+.patient-link:hover {
+    text-decoration: underline;
+}
+
+/* Badges */
+.badge {
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.badge-high {
+    background: rgba(239, 68, 68, 0.1);
+    color: var(--danger);
+}
+
+.badge-medium {
+    background: rgba(217, 119, 6, 0.1);
+    color: #d97706;
+}
+
+.badge-low {
+    background: rgba(22, 163, 74, 0.1);
+    color: #16a34a;
+}
+
+/* Status & Actions Integration */
+.status-actions-cell {
+    position: relative;
+    width: 140px;
+    vertical-align: middle;
+}
+
+.status-text {
+    display: inline-block;
+    transition: opacity 0.15s ease;
+}
+
+.patient-row:hover .status-text {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.row-actions {
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%) translateX(10px);
+    display: flex;
+    gap: 4px;
+    opacity: 0;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    pointer-events: none;
+    justify-content: flex-end;
+}
+
+.patient-row:hover .row-actions {
+    opacity: 1;
+    transform: translateY(-50%) translateX(0);
+    pointer-events: all;
+}
+
+.action-btn {
+    background: none;
+    border: none;
+    padding: 6px;
+    border-radius: 6px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition-fast);
+}
+
+.action-btn:hover {
+    background-color: var(--card-bg);
+    color: var(--primary);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}

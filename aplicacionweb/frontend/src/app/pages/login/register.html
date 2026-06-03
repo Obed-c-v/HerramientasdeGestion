@@ -1,0 +1,205 @@
+<div class="login-container">
+    <div class="login-card registration-card" @fadeInSlide>
+        <header class="login-header">
+            <div class="logo">
+                <img src="assets/images/t.jpg" alt="S-park Logo" class="login-logo">
+                <h1 class="brand">S-park</h1>
+            </div>
+            <p class="description">Registro de nuevo profesional médico</p>
+        </header>
+
+        <form class="login-form" [formGroup]="registerForm" (ngSubmit)="onRegister()">
+            @if (errorMessage) {
+            <div class="error-alert">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                <span>{{ errorMessage }}</span>
+            </div>
+            }
+            @if (successMessage) {
+            <div class="success-alert">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                <span>{{ successMessage }}</span>
+            </div>
+            }
+
+            <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <!-- Nombre -->
+                <div class="form-group"
+                    [class.field-invalid]="registerForm.get('nombre')?.invalid && (registerForm.get('nombre')?.dirty || registerForm.get('nombre')?.touched)"
+                    [class.field-valid]="registerForm.get('nombre')?.valid && registerForm.get('nombre')?.dirty">
+                    <label>Nombre *</label>
+                    <div class="input-wrapper">
+                        <input type="text" formControlName="nombre" placeholder="Nombre">
+                        @if (registerForm.get('nombre')?.valid && registerForm.get('nombre')?.dirty) {
+                            <span class="input-icon valid-icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+                        }
+                        @if (registerForm.get('nombre')?.invalid && (registerForm.get('nombre')?.dirty || registerForm.get('nombre')?.touched)) {
+                            <span class="input-icon error-icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span>
+                        }
+                    </div>
+                    @if (registerForm.get('nombre')?.invalid && (registerForm.get('nombre')?.dirty || registerForm.get('nombre')?.touched)) {
+                        <span class="error-msg">
+                            @if (registerForm.get('nombre')?.errors?.['required']) { El nombre es obligatorio }
+                            @else if (registerForm.get('nombre')?.errors?.['maxlength']) { Máximo 50 caracteres }
+                        </span>
+                    }
+                </div>
+
+                <!-- Apellido -->
+                <div class="form-group"
+                    [class.field-invalid]="registerForm.get('apellido')?.invalid && (registerForm.get('apellido')?.dirty || registerForm.get('apellido')?.touched)"
+                    [class.field-valid]="registerForm.get('apellido')?.valid && registerForm.get('apellido')?.dirty">
+                    <label>Apellido *</label>
+                    <div class="input-wrapper">
+                        <input type="text" formControlName="apellido" placeholder="Apellido">
+                        @if (registerForm.get('apellido')?.valid && registerForm.get('apellido')?.dirty) {
+                            <span class="input-icon valid-icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+                        }
+                        @if (registerForm.get('apellido')?.invalid && (registerForm.get('apellido')?.dirty || registerForm.get('apellido')?.touched)) {
+                            <span class="input-icon error-icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span>
+                        }
+                    </div>
+                    @if (registerForm.get('apellido')?.invalid && (registerForm.get('apellido')?.dirty || registerForm.get('apellido')?.touched)) {
+                        <span class="error-msg">
+                            @if (registerForm.get('apellido')?.errors?.['required']) { El apellido es obligatorio }
+                            @else if (registerForm.get('apellido')?.errors?.['maxlength']) { Máximo 50 caracteres }
+                        </span>
+                    }
+                </div>
+            </div>
+
+            <!-- Email -->
+            <div class="form-group"
+                [class.field-invalid]="registerForm.get('email')?.invalid && (registerForm.get('email')?.dirty || registerForm.get('email')?.touched)"
+                [class.field-valid]="registerForm.get('email')?.valid && registerForm.get('email')?.dirty">
+                <label>Correo electrónico *</label>
+                <div class="input-wrapper">
+                    <input type="email" formControlName="email" placeholder="ejemplo@medicina.com">
+                    @if (registerForm.get('email')?.valid && registerForm.get('email')?.dirty) {
+                        <span class="input-icon valid-icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+                    }
+                    @if (registerForm.get('email')?.invalid && (registerForm.get('email')?.dirty || registerForm.get('email')?.touched)) {
+                        <span class="input-icon error-icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span>
+                    }
+                </div>
+                @if (registerForm.get('email')?.invalid && (registerForm.get('email')?.dirty || registerForm.get('email')?.touched)) {
+                    <span class="error-msg">
+                        @if (registerForm.get('email')?.errors?.['required']) { El correo es obligatorio }
+                        @else if (registerForm.get('email')?.errors?.['email']) { Formato de correo inválido }
+                        @else if (registerForm.get('email')?.errors?.['maxlength']) { Máximo 100 caracteres }
+                    </span>
+                }
+            </div>
+
+            <!-- Password con indicador de fortaleza -->
+            <div class="form-group"
+                [class.field-invalid]="registerForm.get('password')?.invalid && (registerForm.get('password')?.dirty || registerForm.get('password')?.touched)"
+                [class.field-valid]="registerForm.get('password')?.valid && registerForm.get('password')?.dirty">
+                <label>Contraseña *</label>
+                <div class="input-wrapper">
+                    <input type="password" formControlName="password" placeholder="Mínimo 6 caracteres">
+                    @if (registerForm.get('password')?.valid && registerForm.get('password')?.dirty) {
+                        <span class="input-icon valid-icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+                    }
+                    @if (registerForm.get('password')?.invalid && (registerForm.get('password')?.dirty || registerForm.get('password')?.touched)) {
+                        <span class="input-icon error-icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span>
+                    }
+                </div>
+                @if (registerForm.get('password')?.invalid && (registerForm.get('password')?.dirty || registerForm.get('password')?.touched)) {
+                    <span class="error-msg">
+                        @if (registerForm.get('password')?.errors?.['required']) { La contraseña es obligatoria }
+                        @else if (registerForm.get('password')?.errors?.['minlength']) { Mínimo 6 caracteres }
+                        @else if (registerForm.get('password')?.errors?.['maxlength']) { Máximo 50 caracteres }
+                    </span>
+                }
+                @if (registerForm.get('password')?.dirty && registerForm.get('password')?.value) {
+                    <div class="password-strength">
+                        <div class="strength-bars">
+                            <div class="strength-bar" [class.active]="(registerForm.get('password')?.value?.length || 0) >= 1"></div>
+                            <div class="strength-bar" [class.active]="(registerForm.get('password')?.value?.length || 0) >= 4"></div>
+                            <div class="strength-bar" [class.active]="(registerForm.get('password')?.value?.length || 0) >= 6"></div>
+                            <div class="strength-bar" [class.active]="(registerForm.get('password')?.value?.length || 0) >= 10"></div>
+                        </div>
+                        <span class="strength-label">
+                            @if ((registerForm.get('password')?.value?.length || 0) < 4) { Muy débil }
+                            @else if ((registerForm.get('password')?.value?.length || 0) < 6) { Débil }
+                            @else if ((registerForm.get('password')?.value?.length || 0) < 10) { Aceptable }
+                            @else { Fuerte }
+                        </span>
+                    </div>
+                }
+            </div>
+
+            <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <!-- Especialidad -->
+                <div class="form-group"
+                    [class.field-invalid]="registerForm.get('especialidad')?.invalid && (registerForm.get('especialidad')?.dirty || registerForm.get('especialidad')?.touched)"
+                    [class.field-valid]="registerForm.get('especialidad')?.valid && registerForm.get('especialidad')?.dirty">
+                    <label>Especialidad *</label>
+                    <div class="input-wrapper">
+                        <input type="text" formControlName="especialidad" placeholder="Ej. Neurología">
+                        @if (registerForm.get('especialidad')?.valid && registerForm.get('especialidad')?.dirty) {
+                            <span class="input-icon valid-icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+                        }
+                        @if (registerForm.get('especialidad')?.invalid && (registerForm.get('especialidad')?.dirty || registerForm.get('especialidad')?.touched)) {
+                            <span class="input-icon error-icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span>
+                        }
+                    </div>
+                    @if (registerForm.get('especialidad')?.invalid && (registerForm.get('especialidad')?.dirty || registerForm.get('especialidad')?.touched)) {
+                        <span class="error-msg">
+                            @if (registerForm.get('especialidad')?.errors?.['required']) { La especialidad es obligatoria }
+                            @else if (registerForm.get('especialidad')?.errors?.['maxlength']) { Máximo 100 caracteres }
+                        </span>
+                    }
+                </div>
+
+                <!-- Número de Licencia -->
+                <div class="form-group"
+                    [class.field-invalid]="registerForm.get('numero_licencia')?.invalid && (registerForm.get('numero_licencia')?.dirty || registerForm.get('numero_licencia')?.touched)"
+                    [class.field-valid]="registerForm.get('numero_licencia')?.valid && registerForm.get('numero_licencia')?.dirty">
+                    <label>Nº Licencia *</label>
+                    <div class="input-wrapper">
+                        <input type="text" formControlName="numero_licencia" placeholder="ML-XXXXX">
+                        @if (registerForm.get('numero_licencia')?.valid && registerForm.get('numero_licencia')?.dirty) {
+                            <span class="input-icon valid-icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+                        }
+                        @if (registerForm.get('numero_licencia')?.invalid && (registerForm.get('numero_licencia')?.dirty || registerForm.get('numero_licencia')?.touched)) {
+                            <span class="input-icon error-icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span>
+                        }
+                    </div>
+                    @if (registerForm.get('numero_licencia')?.invalid && (registerForm.get('numero_licencia')?.dirty || registerForm.get('numero_licencia')?.touched)) {
+                        <span class="error-msg">
+                            @if (registerForm.get('numero_licencia')?.errors?.['required']) { El número de licencia es obligatorio }
+                            @else if (registerForm.get('numero_licencia')?.errors?.['maxlength']) { Máximo 50 caracteres }
+                        </span>
+                    }
+                </div>
+            </div>
+
+            <!-- Teléfono (Opcional) -->
+            <div class="form-group"
+                [class.field-invalid]="registerForm.get('telefono')?.invalid && (registerForm.get('telefono')?.dirty || registerForm.get('telefono')?.touched)"
+                [class.field-valid]="registerForm.get('telefono')?.valid && (registerForm.get('telefono')?.dirty || registerForm.get('telefono')?.touched) && registerForm.get('telefono')?.value">
+                <label>Teléfono <span class="optional-label">(Opcional)</span></label>
+                <div class="input-wrapper">
+                    <input type="tel" formControlName="telefono" placeholder="+52 5512345678">
+                    @if (registerForm.get('telefono')?.valid && registerForm.get('telefono')?.dirty && registerForm.get('telefono')?.value) {
+                        <span class="input-icon valid-icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+                    }
+                    @if (registerForm.get('telefono')?.invalid && (registerForm.get('telefono')?.dirty || registerForm.get('telefono')?.touched)) {
+                        <span class="input-icon error-icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span>
+                    }
+                </div>
+                @if (registerForm.get('telefono')?.invalid && (registerForm.get('telefono')?.dirty || registerForm.get('telefono')?.touched)) {
+                    <span class="error-msg">Máximo 20 caracteres</span>
+                }
+            </div>
+
+            <button type="submit" class="btn-primary" [disabled]="registerForm.invalid">Registrarse</button>
+
+            <div class="form-footer">
+                <a routerLink="/login" class="forgot-password">¿Ya tiene cuenta? Inicie sesión</a>
+            </div>
+        </form>
+    </div>
+</div>

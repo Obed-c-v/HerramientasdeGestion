@@ -1,0 +1,77 @@
+<aside class="sidebar" [class.collapsed]="isCollapsed()" [class.mobile-open]="isMobileOpen()">
+    <div class="sidebar-brand">
+        <div class="brand-content">
+            <img src="assets/images/t.jpg" alt="S-park Logo" class="sidebar-logo">
+            <span class="brand-text">S-park</span>
+        </div>
+        <button class="mobile-close-btn" (click)="toggleMobile()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+        </button>
+    </div>
+
+    <nav class="sidebar-nav">
+        <!-- Dashboard: visible para todos los roles -->
+        <a routerLink="/dashboard" routerLinkActive="active" class="nav-item">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="3" width="7" height="7"></rect>
+                <rect x="14" y="3" width="7" height="7"></rect>
+                <rect x="14" y="14" width="7" height="7"></rect>
+                <rect x="3" y="14" width="7" height="7"></rect>
+            </svg>
+            <span class="nav-text">{{ settingsService.translate('dashboard') }}</span>
+        </a>
+
+        <!-- Pacientes: visible para todos los roles -->
+        <a routerLink="/patients" routerLinkActive="active" class="nav-item">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                <circle cx="9" cy="7" r="4"></circle>
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+            </svg>
+            <span class="nav-text">{{ settingsService.translate('patients') }}</span>
+        </a>
+
+        <!-- Gestión de Médicos: solo ADMIN -->
+        @if (authService.isAdmin()) {
+            <a routerLink="/doctors" routerLinkActive="active" class="nav-item">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="9" cy="7" r="4"></circle>
+                    <path d="M19 8v6"></path>
+                    <path d="M22 11h-6"></path>
+                </svg>
+                <span class="nav-text">{{ settingsService.translate('doctors_management') }}</span>
+            </a>
+
+            <!-- Asignación de Pacientes: solo ADMIN -->
+            <a routerLink="/doctor-patients" routerLinkActive="active" class="nav-item">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="9" cy="7" r="4"></circle>
+                    <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                </svg>
+                <span class="nav-text">{{ settingsService.translate('doctor_patients_relation') }}</span>
+            </a>
+        }
+
+        <!-- Alertas: visible para todos los roles -->
+        <a routerLink="/alerts" routerLinkActive="active" class="nav-item">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+            </svg>
+            <span class="nav-text">{{ settingsService.translate('alerts') }}</span>
+        </a>
+    </nav>
+</aside>

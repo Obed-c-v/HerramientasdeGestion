@@ -1,0 +1,106 @@
+<div class="content-scroll" @fadeInSlide>
+    <!-- Summary Cards -->
+    <section class="summary-grid" @staggerAnimation *ngIf="stats()">
+        <div class="summary-card">
+            <div class="card-label">{{ settingsService.translate('total_patients') }}</div>
+            <div class="card-value">{{ stats().total_pacientes }}</div>
+            <div class="card-footer text-success">+{{ stats().total_pacientes }} {{ settingsService.translate('this_month') }}</div>
+        </div>
+        <div class="summary-card highlight-danger">
+            <div class="card-label">{{ settingsService.translate('high_risk') }}</div>
+            <div class="card-value">{{ stats().riesgo_alto }}</div>
+            <div class="card-footer text-danger">{{ settingsService.translate('at_risk_note') }}</div>
+        </div>
+        <div class="summary-card">
+            <div class="card-label">{{ settingsService.translate('tests_performed') }}</div>
+            <div class="card-value">{{ stats().pruebas_realizadas }}</div>
+            <div class="card-footer text-muted">{{ settingsService.translate('historical_total') }}</div>
+        </div>
+        <div class="summary-card">
+            <div class="card-label">{{ settingsService.translate('last_test') }}</div>
+            <div class="card-value">{{ stats().ultima_prueba | date:'shortTime' }}</div>
+        </div>
+    </section>
+
+    <div class="main-grid" @staggerAnimation>
+        <!-- Recent Activity Table -->
+        <section class="activity-section">
+            <div class="section-header">
+                <h3>{{ settingsService.translate('recent_activity') }}</h3>
+            </div>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>{{ settingsService.translate('patient') }}</th>
+                            <th>{{ settingsService.translate('date') }}</th>
+                            <th>{{ settingsService.translate('test_id') }}</th>
+                            <th>{{ settingsService.translate('status') }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <div class="patient-info">
+                                    <span class="p-name">García, Manuel</span>
+                                </div>
+                            </td>
+                            <td>Oct 29, 2026</td>
+                            <td>#VOX-782</td>
+                            <td><span class="badge badge-low">{{ settingsService.translate('low_risk') }}</span></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="patient-info">
+                                    <span class="p-name">López, Elena</span>
+                                </div>
+                            </td>
+                            <td>Oct 29, 2026</td>
+                            <td>#VOX-781</td>
+                            <td><span class="badge badge-high">{{ settingsService.translate('high_risk') }}</span></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="patient-info">
+                                    <span class="p-name">Martínez, Juan</span>
+                                </div>
+                            </td>
+                            <td>Oct 28, 2026</td>
+                            <td>#VOX-779</td>
+                            <td><span class="badge badge-medium">{{ settingsService.translate('medium_risk') }}</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="patient-info">
+                                    <span class="p-name">Sánchez, Clara</span>
+                                </div>
+                            </td>
+                            <td>Oct 28, 2026</td>
+                            <td>#VOX-778</td>
+                            <td><span class="badge badge-low">{{ settingsService.translate('low_risk') }}</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Sidebar Widgets (Alerts) -->
+        <section class="alerts-section">
+            <div class="section-header">
+                <h3>{{ settingsService.translate('clinical_alerts') }}</h3>
+            </div>
+            <div class="alerts-list">
+                <div class="alert-item" *ngFor="let alert of alerts()">
+                    <div class="alert-indicator" [ngClass]="alert.riesgo.toLowerCase()"></div>
+                    <div class="alert-content">
+                        <div class="alert-title">{{ alert.mensaje }}</div>
+                        <p>{{ settingsService.translate('patient') }}: <strong>{{ alert.paciente }}</strong></p>
+                        <button class="btn-secondary-sm" routerLink="/alerts">{{
+                            settingsService.translate('view_patient') }}</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>

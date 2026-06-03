@@ -1,0 +1,236 @@
+<div class="patients-page">
+    @if (notification()) {
+        <div class="notification-toast" [class]="notification()?.type" 
+             style="position: fixed; top: 20px; right: 20px; z-index: 3000; padding: 1rem 1.5rem; border-radius: 8px; color: white; display: flex; align-items: center; gap: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);"
+             [style.background-color]="notification()?.type === 'success' ? '#2e7d32' : '#d32f2f'">
+            <svg *ngIf="notification()?.type === 'success'" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            <svg *ngIf="notification()?.type === 'error'" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
+            <span>{{ notification()?.message }}</span>
+        </div>
+    }
+
+    <section class="filters-container">
+        <div class="search-box">
+            <i class="icon-search"></i>
+            <input type="text" [placeholder]="settingsService.translate('search_placeholder')" [formControl]="searchTermControl">
+        </div>
+        <div class="filter-actions">
+            <button class="btn-primary" (click)="openModal()">{{ settingsService.translate('register_patient')
+                }}</button>
+        </div>
+    </section>
+
+    <section class="card patients-card">
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>{{ settingsService.translate('patients') }}</th>
+                        <th>ID</th>
+                        <th>Edad</th>
+                        <th>{{ settingsService.translate('last_test') }}</th>
+                        <th style="width: 140px;">{{ settingsService.translate('risk_level') }}</th>
+                    </tr>
+                </thead>
+                <tbody [@staggerAnimation]="paginatedPatients.length">
+                    @for (patient of paginatedPatients; track patient.id) {
+                    <tr class="patient-row">
+                        <td>
+                            <a [routerLink]="['/patients/detail', patient.id]" class="patient-link">
+                                <div class="patient-cell">
+                                    <div class="avatar-sm">{{patient.name.substring(0,2)}}</div>
+                                    <span class="name">{{patient.name}}</span>
+                                </div>
+                            </a>
+                        </td>
+                        <td><span class="id-text">{{patient.id}}</span></td>
+                        <td>{{patient.age}} años</td>
+                        <td>{{patient.lastTest}}</td>
+                        <td class="status-actions-cell">
+                            <span class="status-text badge" [class]="patient.riskClass">
+                                {{ settingsService.translate(patient.riskLevel.toLowerCase() === 'alta' ? 'high' :
+                                (patient.riskLevel.toLowerCase() === 'medio' ? 'medium' : (patient.riskLevel.toLowerCase() === 'bajo' ? 'low' : 'pendiente'))) }}
+                            </span>
+                            <div class="row-actions">
+                                <button class="action-btn" [routerLink]="['/patients/detail', patient.id]"
+                                    [title]="settingsService.translate('view_detail')">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round">
+                                        <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" />
+                                        <circle cx="12" cy="12" r="3" />
+                                    </svg>
+                                </button>
+                                <button class="action-btn" (click)="editPatient(patient)"
+                                    [title]="settingsService.translate('edit')">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round">
+                                        <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z" />
+                                    </svg>
+                                </button>
+                                <button class="action-btn text-danger" (click)="deletePatient(patient.id)"
+                                    [title]="settingsService.translate('delete')">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round">
+                                        <path
+                                            d="M3 6h18m-2 0v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6m3 0V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
+                                        <line x1="10" y1="11" x2="10" y2="17" />
+                                        <line x1="14" y1="11" x2="14" y2="17" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination Controls -->
+        @if (totalPages > 1) {
+        <div class="pagination-container">
+            <button class="pagination-btn" [class.disabled]="currentPage === 1" (click)="prevPage()"
+                [disabled]="currentPage === 1">
+                {{ settingsService.translate('previous') }}
+            </button>
+            <div class="page-numbers">
+                @for (page of pageNumbers; track page) {
+                <button class="page-num" [class.active]="currentPage === page" (click)="goToPage(page)">
+                    {{page}}
+                </button>
+                }
+            </div>
+            <button class="pagination-btn" [class.disabled]="currentPage === totalPages" (click)="nextPage()"
+                [disabled]="currentPage === totalPages">
+                {{ settingsService.translate('next') }}
+            </button>
+        </div>
+        }
+    </section>
+
+    <!-- Modal Registro -->
+    @if (showModal) {
+    <div class="modal-overlay" (click)="closeModal()">
+        <div class="modal-card" (click)="$event.stopPropagation()">
+            <header class="modal-header">
+                <h2>{{ isEditing ? settingsService.translate('edit_patient') :
+                    settingsService.translate('register_new_patient') }}</h2>
+                <button class="close-btn" (click)="closeModal()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </header>
+
+            <div class="modal-body">
+                <form class="patient-form" [formGroup]="patientForm">
+                    <div class="form-row">
+                        <div class="form-group" [class.error]="patientForm.get('firstName')?.invalid && (patientForm.get('firstName')?.dirty || patientForm.get('firstName')?.touched)">
+                            <label>{{ settingsService.translate('first_name') }} *</label>
+                            <input type="text" formControlName="firstName" placeholder="Ej. Roberto">
+                            @if (patientForm.get('firstName')?.invalid && (patientForm.get('firstName')?.dirty || patientForm.get('firstName')?.touched)) {
+                                <span class="error-message">
+                                    @if (patientForm.get('firstName')?.errors?.['required']) { {{ settingsService.translate('field_required') }} }
+                                    @else if (patientForm.get('firstName')?.errors?.['hasHtml']) { {{ settingsService.translate('html_not_allowed') }} }
+                                    @else if (patientForm.get('firstName')?.errors?.['hasNumbers']) { {{ settingsService.translate('no_numbers_allowed') }} }
+                                </span>
+                            }
+                        </div>
+                        <div class="form-group" [class.error]="patientForm.get('lastName')?.invalid && (patientForm.get('lastName')?.dirty || patientForm.get('lastName')?.touched)">
+                            <label>{{ settingsService.translate('last_name') }} *</label>
+                            <input type="text" formControlName="lastName" placeholder="Ej. García">
+                            @if (patientForm.get('lastName')?.invalid && (patientForm.get('lastName')?.dirty || patientForm.get('lastName')?.touched)) {
+                                <span class="error-message">
+                                    @if (patientForm.get('lastName')?.errors?.['required']) { {{ settingsService.translate('field_required') }} }
+                                    @else if (patientForm.get('lastName')?.errors?.['hasHtml']) { {{ settingsService.translate('html_not_allowed') }} }
+                                    @else if (patientForm.get('lastName')?.errors?.['hasNumbers']) { {{ settingsService.translate('no_numbers_allowed') }} }
+                                </span>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group" [class.error]="patientForm.get('age')?.invalid && (patientForm.get('age')?.dirty || patientForm.get('age')?.touched)">
+                            <label>{{ settingsService.translate('age') }}</label>
+                            <input type="number" formControlName="age" placeholder="68">
+                            @if (patientForm.get('age')?.invalid && (patientForm.get('age')?.dirty || patientForm.get('age')?.touched)) {
+                                <span class="error-message">
+                                    @if (patientForm.get('age')?.errors?.['onlyNumbers']) { {{ settingsService.translate('only_numbers_allowed') }} }
+                                    @else { {{ settingsService.translate('invalid_age') || 'Edad inválida' }} }
+                                </span>
+                            }
+                        </div>
+                        <div class="form-group">
+                            <label>{{ settingsService.translate('gender') }}</label>
+                            <select formControlName="gender">
+                                <option value="Masculino">{{ settingsService.translate('male') }}</option>
+                                <option value="Femenino">{{ settingsService.translate('female') }}</option>
+                                <option value="Otro">{{ settingsService.translate('other') }}</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group" [class.error]="patientForm.get('phone')?.invalid && (patientForm.get('phone')?.dirty || patientForm.get('phone')?.touched)">
+                            <label>{{ settingsService.translate('phone') }}</label>
+                            <input type="tel" formControlName="phone" placeholder="Ej. 5512345678">
+                            @if (patientForm.get('phone')?.invalid && (patientForm.get('phone')?.dirty || patientForm.get('phone')?.touched)) {
+                                <span class="error-message">{{ settingsService.translate('invalid_phone_format') }}</span>
+                            }
+                        </div>
+                        <div class="form-group" [class.error]="patientForm.get('email')?.invalid && (patientForm.get('email')?.dirty || patientForm.get('email')?.touched)">
+                            <label>{{ settingsService.translate('email') }} *</label>
+                            <input type="email" formControlName="email" placeholder="ejemplo@email.com">
+                            @if (patientForm.get('email')?.invalid && (patientForm.get('email')?.dirty || patientForm.get('email')?.touched)) {
+                                <span class="error-message">
+                                    @if (patientForm.get('email')?.errors?.['required']) { {{ settingsService.translate('email_required') || 'El correo es obligatorio' }} }
+                                    @else { {{ settingsService.translate('invalid_email_format') }} }
+                                </span>
+                            }
+                        </div>
+                    </div>
+
+
+
+                    @if (authService.isAdmin()) {
+                        <div class="form-group full-width" [class.error]="patientForm.get('medico_id')?.invalid && (patientForm.get('medico_id')?.dirty || patientForm.get('medico_id')?.touched)">
+                            <label>Médico Asignado *</label>
+                            <select formControlName="medico_id">
+                                <option [ngValue]="null">Selecciona un médico principal</option>
+                                @for (medico of medicosList(); track medico.id) {
+                                    <option [value]="medico.id">{{ medico.nombre }} {{ medico.apellido }} - {{ medico.especialidad }}</option>
+                                }
+                            </select>
+                            @if (patientForm.get('medico_id')?.invalid && (patientForm.get('medico_id')?.dirty || patientForm.get('medico_id')?.touched)) {
+                                <span class="error-message">El paciente debe tener un médico asignado</span>
+                            }
+                        </div>
+                    }
+
+                    <div class="form-group full-width" [class.error]="patientForm.get('initialDiagnosis')?.invalid && (patientForm.get('initialDiagnosis')?.dirty || patientForm.get('initialDiagnosis')?.touched)">
+                        <label>{{ settingsService.translate('initial_diagnosis') }}</label>
+                        <textarea formControlName="initialDiagnosis" rows="3" placeholder="..."></textarea>
+                        @if (patientForm.get('initialDiagnosis')?.invalid && (patientForm.get('initialDiagnosis')?.dirty || patientForm.get('initialDiagnosis')?.touched)) {
+                            <span class="error-message">
+                                @if (patientForm.get('initialDiagnosis')?.errors?.['hasHtml']) { {{ settingsService.translate('html_not_allowed') }} }
+                                @else { Max 500 caracteres }
+                            </span>
+                        }
+                    </div>
+                </form>
+            </div>
+
+            <footer class="modal-footer">
+                <button class="btn-secondary" (click)="closeModal()">{{ settingsService.translate('cancel') }}</button>
+                <button class="btn-primary" [disabled]="patientForm.invalid" (click)="savePatient()">
+                    {{ isEditing ? 'Actualizar Paciente' : settingsService.translate('save_patient') }}
+                </button>
+            </footer>
+        </div>
+    </div>
+    }
+</div>

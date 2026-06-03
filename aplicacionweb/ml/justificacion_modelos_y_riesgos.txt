@@ -1,0 +1,91 @@
+=============================================================================
+  S-PARK: JUSTIFICACIÓN CLÍNICA Y TÉCNICA DE MODELOS IA Y NIVELES DE RIESGO
+=============================================================================
+
+Este documento detalla las bases científicas, estadísticas y matemáticas para:
+1. La discretización de la escala UPDRS en tres niveles de riesgo (Bajo, Medio, Alto).
+2. La justificación de los 4 algoritmos de Machine Learning seleccionados para S-Park.
+
+-----------------------------------------------------------------------------
+1. JUSTIFICACIÓN DE LOS NIVELES DE RIESGO (ESCALA UPDRS)
+-----------------------------------------------------------------------------
+La escala unificada de calificación de la enfermedad de Parkinson (UPDRS) mide la
+severidad de la progresión de la enfermedad. El score total_UPDRS en nuestro dataset
+de telemonitoreo (parkinsons_updrs.data) va desde un valor mínimo de 7.0 hasta un
+máximo de 54.99.
+
+Para transformar este indicador clínico continuo en una herramienta de soporte
+visual comprensible para el neurólogo, discretizamos la severidad en tres categorías:
+
+  * [Riesgo Bajo]   total_UPDRS <= 25  (Muestras: 2,188)
+    - Justificación clínica: Representa etapas tempranas de progresión o síntomas
+      leves. El deterioro acústico de la voz es mínimo, reflejando cuerdas vocales
+      con tono estable.
+    - Justificación estadística: Abarca aproximadamente el percentil 35 inferior.
+
+  * [Riesgo Medio]  25 < total_UPDRS <= 40  (Muestras: 2,681)
+    - Justificación clínica: Representa severidad moderada. Se observan pequeñas
+      fluctuaciones de frecuencia (jitter) y amplitud (shimmer) debido a una
+      pérdida incipiente de tensión muscular laríngea.
+    - Justificación estadística: Abarca el rango central donde se concentra la
+      mayoría de los registros clínicos en telemonitoreo.
+
+  * [Riesgo Alto]   total_UPDRS > 40  (Muestras: 1,006)
+    - Justificación clínica: Severidad severa. Presenta alteraciones acústicas
+      pronunciadas (marcada disfonía, respiración inestable y altos niveles de
+      ruido en la voz, reflejados en un bajo HNR). Demuestra deterioro funcional.
+    - Justificación estadística: Abarca el percentil superior (> 75), garantizando
+      que tengamos una masa crítica de más de 1,000 muestras para que los modelos
+      puedan aprender a identificar estos patrones de manera altamente confiable.
+
+* ¿POR QUÉ AJUSTAMOS ESTOS LÍMITES?
+Originalmente se propusieron cortes de [0, 30, 60], pero debido a que el puntaje
+máximo real en el dataset es 54.99, la clase de RIESGO ALTO (> 60) quedaba con 0
+muestras. Con nuestra optimización basada en la distribución real de los datos:
+  - BAJO  : 37.2% de los datos
+  - MEDIO : 45.6% de los datos
+  - ALTO  : 17.2% de los datos
+Se logra un balance ideal para entrenar modelos multiclase sin sesgos.
+
+-----------------------------------------------------------------------------
+2. JUSTIFICACIÓN DE LOS MODELOS DE MACHINE LEARNING SELECCIONADOS
+-----------------------------------------------------------------------------
+Para garantizar el respaldo científico de S-Park ante evaluaciones académicas
+y clínicas, seleccionamos 4 algoritmos bajo 3 paradigmas matemáticos diferentes:
+
+  1. RANDOM FOREST (Bosque Aleatorio)
+     - Paradigma: Ensamble por Promediado (Bagging) de árboles de decisión.
+     - Justificación: Es altamente inmune al sobreajuste y tolera valores atípicos
+       (outliers) comunes en grabaciones de voz ruidosas.
+     - Valor clínico clave: Proporciona la métrica de "Feature Importance",
+       que le permite explicar al neurólogo qué biomarcadores específicos
+       (ej. Jitter, Shimmer, DFA) tienen mayor peso en la asignación de riesgo.
+
+  2. SUPPORT VECTOR MACHINE - SVM (Máquina de Vectores de Soporte)
+     - Paradigma: Geometría de Hiperplanos con Kernel RBF (Función de Base Radial).
+     - Justificación: Es la técnica estándar por excelencia en la literatura
+       científica para la clasificación biomédica de voz. El kernel RBF permite
+       proyectar características acústicas complejas a espacios de mayor dimensión
+       donde la separación entre sanos y enfermos se vuelve óptima y lineal.
+     - Valor clínico clave: Alta precisión en conjuntos de características pequeñas.
+
+  3. GRADIENT BOOSTING (Aumento de Gradiente)
+     - Paradigma: Ensamble Secuencial por Boosting.
+     - Justificación: Entrena árboles de decisión consecutivamente, donde cada
+       árbol nuevo se optimiza matemáticamente para minimizar los errores
+       (residuos) de los árboles anteriores.
+     - Valor clínico clave: Excelente para ajustar predicciones en pacientes cuyas
+       características de voz están en los bordes fronterizos entre clases.
+
+  4. XGBOOST (Extreme Gradient Boosting)
+     - Paradigma: Aumento de Gradiente optimizado con regularización L1 y L2.
+     - Justificación: Es el algoritmo estado del arte para datos tabulares en
+       la industria. Su ventaja matemática es que incorpora penalizaciones L1
+       (Lasso) y L2 (Ridge) en su función objetivo, evitando activamente que el
+       modelo "memorice" (overfit) las peculiaridades del dataset de entrenamiento.
+     - Valor clínico clave: Máxima precisión, control total del sobreajuste y
+       procesamiento sumamente veloz.
+
+=============================================================================
+  S-Park: Uniendo la ciencia médica con el poder de la Inteligencia Artificial.
+=============================================================================

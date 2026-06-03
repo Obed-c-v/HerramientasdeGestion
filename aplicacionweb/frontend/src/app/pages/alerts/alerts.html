@@ -1,0 +1,76 @@
+<div class="alerts-container">
+    <header class="alerts-header">
+        <div class="header-content">
+            <h1>{{ settingsService.translate('clinical_alerts_title') }}</h1>
+        </div>
+        <div class="header-stats">
+            <div class="stat-mini">
+                <span class="stat-label">{{ settingsService.translate('total_today') }}</span>
+                <span class="stat-val">12</span>
+            </div>
+            <div class="stat-mini critical">
+                <span class="stat-label">{{ settingsService.translate('critical') }}</span>
+                <span class="stat-val">3</span>
+            </div>
+        </div>
+    </header>
+
+    <div class="filters-bar">
+        <div class="filter-group">
+            <label>{{ settingsService.translate('alert_level') }}</label>
+            <div class="filter-chips">
+                @for (level of filterLevels; track level) {
+                <button class="chip" [class.active]="selectedLevel() === level" (click)="setFilter(level)">
+                    {{ settingsService.translate(level.toLowerCase() === 'todas' ? 'all' : (level.toLowerCase() ===
+                    'alta' ? 'high' : (level.toLowerCase() === 'media' ? 'medium' : 'low_risk'))) }}
+                </button>
+                }
+            </div>
+        </div>
+        <div class="filter-group">
+            <label>{{ settingsService.translate('period') }}</label>
+            <select class="filter-select">
+                <option>{{ settingsService.translate('last_24h') }}</option>
+                <option>{{ settingsService.translate('last_7d') }}</option>
+                <option>{{ settingsService.translate('current_month') }}</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="alerts-list" [@staggerAnimation]="filteredAlerts.length">
+        @for (alert of filteredAlerts; track alert.id) {
+        <div class="alert-card" [class]="alert.levelClass">
+            <div class="alert-side-indicator"></div>
+            <div class="alert-body">
+                <div class="alert-top">
+                    <div class="patient-info">
+                        <span class="patient-id">{{alert.id}}</span>
+                        <h3 class="patient-name">{{alert.name}}</h3>
+                    </div>
+                    <div class="alert-meta">
+                        <span class="alert-date">{{alert.date}} | {{alert.time}}</span>
+                        <span class="alert-level-badge" [class]="alert.levelClass">{{
+                            settingsService.translate(alert.level.toLowerCase() === 'alta' ? 'high' :
+                            (alert.level.toLowerCase() === 'media' ? 'medium' : 'low_risk')) }}</span>
+                    </div>
+                </div>
+
+                <div class="alert-content">
+                    <div class="clinical-reason">
+                        <strong>{{ settingsService.translate('clinical_reason') }}:</strong>
+                        <p>{{alert.reason}}</p>
+                    </div>
+                </div>
+
+                <div class="alert-actions">
+                    <span class="status-indicator">
+                        <span class="dot"></span> {{alert.status}}
+                    </span>
+                    <button class="btn-primary" [routerLink]="['/patients/detail', alert.id]">{{
+                        settingsService.translate('view_file') }}</button>
+                </div>
+            </div>
+        </div>
+        }
+    </div>
+</div>

@@ -1,0 +1,6 @@
+{
+  "title": "Actividad Git y GitHub: Flujo básico",
+  "body": "Se realizó el flujo básico de Git y GitHub mediante la clonación del repositorio, creación de una rama local, modificación de archivos, commit, push y creación del Pull Request. Además, se agregó un archivo de texto con información personal básica.",
+  "head": "actividad-git-obed",
+  "base": "main"
+}

@@ -1,0 +1,184 @@
+<div class="detail-container">
+    @if (patientData()) {
+    <header class="detail-header">
+        <div class="header-main">
+            <div class="patient-title">
+                <h1>{{patientData().name}}</h1>
+                <span class="patient-id-badge">{{patientData().id}}</span>
+            </div>
+           
+        </div>
+    </header>
+
+    <div class="detail-grid">
+        <!-- Sidebar Info -->
+        <aside class="info-sidebar">
+            <section class="card profile-card">
+                <div class="profile-header">
+                    <div class="avatar-lg">{{patientData().name.substring(0,2)}}</div>
+                    <div class="risk-indicator" [class]="patientData().riskClass">
+                        {{ settingsService.translate('risk_level') }} {{
+                        settingsService.translate(patientData().riskLevel.toLowerCase() === 'alta' ? 'high' :
+                        (patientData().riskLevel.toLowerCase() === 'medio' ? 'medium' : 'low')) }}
+                    </div>
+                </div>
+                <div class="profile-details">
+                    <div class="detail-item">
+                        <span class="label">{{ settingsService.translate('age_label') }}</span>
+                        <span class="value">{{patientData().age}} {{ settingsService.translate('years_old') }}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="label">{{ settingsService.translate('gender_label') }}</span>
+                        <span class="value">{{ settingsService.translate(patientData().gender.toLowerCase() === 'masculino' ?
+                            'male' : (patientData().gender.toLowerCase() === 'femenino' ? 'female' : 'other')) }}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="label">{{ settingsService.translate('diagnosis_label') }}</span>
+                        <span class="value">{{patientData().diagnosisDate | date}}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="label">{{ settingsService.translate('current_status') }}</span>
+                        <span class="value">{{patientData().currentStage}}</span>
+                    </div>
+                </div>
+            </section>
+
+            <section class="card notes-section">
+                <div class="card-header-sm">
+                    <h3>{{ settingsService.translate('clinical_notes') }}</h3>
+                    <button class="btn-text" (click)="toggleAddNote()">
+                        {{ isAddingNote ? settingsService.translate('cancel') : '+ ' + settingsService.translate('add_note') }}
+                    </button>
+                </div>
+
+                @if (isAddingNote) {
+                <div class="add-note-container" [formGroup]="noteForm">
+                    <div class="form-group-sm">
+                        <label>{{ settingsService.translate('note_type') }}</label>
+                        <select formControlName="tipo" class="note-type-select">
+                            <option value="INICIAL">{{ settingsService.translate('initial_diagnosis') }}</option>
+                            <option value="SEGUIMIENTO">{{ settingsService.translate('follow_up') }}</option>
+                            <option value="OBSERVACION">{{ settingsService.translate('observation') }}</option>
+                        </select>
+                    </div>
+                    <textarea formControlName="contenido" rows="3" class="notes-textarea"
+                        [placeholder]="settingsService.translate('write_obs_placeholder')"></textarea>
+                    
+                    @if (noteForm.get('contenido')?.invalid && noteForm.get('contenido')?.touched) {
+                        <span class="error-message-sm">
+                            @if (noteForm.get('contenido')?.errors?.['required']) { {{ settingsService.translate('field_required') }} }
+                            @else if (noteForm.get('contenido')?.errors?.['hasHtml']) { {{ settingsService.translate('html_not_allowed') }} }
+                        </span>
+                    }
+
+                    <div class="edit-actions">
+                        <button class="btn-primary-sm" [disabled]="noteForm.invalid" (click)="saveNote()">{{
+                            settingsService.translate('save_note') }}</button>
+                    </div>
+                </div>
+                }
+
+                <!-- Diagnóstico Inicial Destacado -->
+                @if (initialDiagnosis) {
+                <div class="diagnosis-highlight-card">
+                    <div class="diagnosis-header">
+                        <span class="diagnosis-badge">{{ settingsService.translate('initial') }}</span>
+                        <span class="note-date">{{initialDiagnosis.created_at | date}}</span>
+                    </div>
+                    <p class="diagnosis-content">{{initialDiagnosis.contenido}}</p>
+                </div>
+                } @else if (!isAddingNote) {
+                <div class="empty-state-notes">
+                    <p>{{ settingsService.translate('no_diagnosis_yet') }}</p>
+                </div>
+                }
+
+                <!-- Línea de tiempo de Seguimiento/Observaciones -->
+                <div class="notes-timeline">
+                    @for (note of otherNotes; track note.id) {
+                    <div class="timeline-item" [class]="note.tipo.toLowerCase()">
+                        <div class="timeline-marker"></div>
+                        <div class="note-card">
+                            <div class="note-header">
+                                <span class="note-type">{{ settingsService.translate(note.tipo.toLowerCase()) }}</span>
+                                <span class="note-date">{{note.created_at | date}}</span>
+                            </div>
+                            <p class="note-content">{{note.contenido}}</p>
+                        </div>
+                    </div>
+                    }
+                </div>
+            </section>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Evolution Chart Section -->
+            <section class="card evolution-card">
+                <div class="card-header">
+                    <h3>{{ settingsService.translate('biomarker_evolution') }}</h3>
+                </div>
+                <div class="chart-container">
+                    <div class="chart-legend">
+                        <p class="interpretation">
+                            <strong>{{ settingsService.translate('clinical_analysis') }}:</strong>
+                            {{patientData().interpretation || 'Sin interpretación disponible actualmente.'}}
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Test History Table -->
+            <section class="card history-card">
+                <div class="card-header">
+                    <h3>{{ settingsService.translate('voice_test_history') }}</h3>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>{{ settingsService.translate('date') }}</th>
+                                <th>Jitter (%)</th>
+                                <th>Shimmer (%)</th>
+                                <th>HNR (dB)</th>
+                                <th>{{ settingsService.translate('result') }}</th>
+                                <th>{{ settingsService.translate('actions') }}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (test of patientData().history; track test.date) {
+                            <tr>
+                                <td>{{test.date}}</td>
+                                <td>{{test.jitter}}</td>
+                                <td>{{test.shimmer}}</td>
+                                <td>{{test.hnr}}</td>
+                                <td>
+                                    <span class="badge"
+                                        [class]="test.result.toLowerCase() === 'crítico' || test.result.toLowerCase() === 'alto' ? 'badge-danger' : 'badge-success'">
+                                        {{ settingsService.translate(test.result.toLowerCase() === 'crítico' || test.result.toLowerCase() === 'alto' ? 'high' : 'stable')
+                                        || test.result }}
+                                    </span>
+                                </td>
+                                <td><button class="btn-icon-test">{{ settingsService.translate('view') }}</button></td>
+                            </tr>
+                            }
+                            @if (patientData().history.length === 0) {
+                                <tr>
+                                    <td colspan="6" style="text-align: center; padding: 2rem; color: var(--text-muted);">
+                                        No hay registros de pruebas disponibles.
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+    </div>
+    } @else {
+        <div class="loading-container" style="display: flex; justify-content: center; align-items: center; height: 300px;">
+            <p>{{ settingsService.translate('loading') }}...</p>
+        </div>
+    }
+</div>
+/div>
