@@ -1,0 +1,160 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar class="transparent-header">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/tab1" icon="chevron-back-outline" text=""></ion-back-button>
+    </ion-buttons>
+    <ion-title class="header-title">Mi Perfil</ion-title>
+    <ion-buttons slot="end">
+      <ion-button class="settings-top-btn">
+        <ion-icon name="settings-outline" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="app-content">
+  <!-- SECCIÓN HÉROE OSCURA CON CUADRÍCULA -->
+  <div class="hero-section">
+    <div class="profile-header-container">
+      <div class="avatar-outer-container">
+        <!-- FOTO PERFIL Y ARO LUMINOSO -->
+        <div class="avatar-ring-glow">
+          <img [src]="fotoPerfil" class="profile-avatar" alt="Avatar">
+        </div>
+        
+        <!-- BOTÓN CAMARA FLOTANTE -->
+        <div class="edit-avatar-badge" (click)="seleccionarFoto()">
+          <ion-icon name="camera-outline"></ion-icon>
+        </div>
+
+        <!-- INPUT OCULTO PARA CARGA DE FOTO -->
+        <input
+          type="file"
+          accept="image/*"
+          hidden
+          #fileInput
+          (change)="cargarFoto($event)"
+        >
+      </div>
+
+      <!-- SKELETON MIENTRAS CARGA -->
+      <div *ngIf="cargando" style="text-align:center; padding: 12px 0;">
+        <ion-spinner name="crescent" color="light"></ion-spinner>
+      </div>
+
+      <ng-container *ngIf="!cargando">
+        <h1 class="profile-name">{{ usuario || 'Sin nombre' }}</h1>
+        <p class="profile-email">{{ correo || '—' }}</p>
+      </ng-container>
+    </div>
+
+    <!-- FICHA RÁPIDA DE SALUD EN VIDRIO (GLASSMORPHISM) -->
+    <div class="health-glass-grid">
+      <div class="health-glass-card">
+        <span class="health-card-val">O+</span>
+        <span class="health-card-lbl">Tipo Sangre</span>
+      </div>
+
+      <div class="health-glass-card">
+        <span class="health-card-val">75 <small>kg</small></span>
+        <span class="health-card-lbl">Peso</span>
+      </div>
+
+      <div class="health-glass-card">
+        <span class="health-card-val">178 <small>cm</small></span>
+        <span class="health-card-lbl">Altura</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECCIÓN PRINCIPAL BLANCA QUE SUBE -->
+  <div class="main-card-section">
+    <!-- SECCIÓN: CONFIGURACIÓN GENERAL -->
+    <div class="menu-group-section">
+      <h2 class="section-title">Configuración General</h2>
+      
+      <div class="premium-list-wrapper">
+        <ion-item lines="none" class="premium-list-item">
+          <div class="icon-circle-bg blue" slot="start">
+            <ion-icon name="person-outline"></ion-icon>
+          </div>
+          <ion-label class="menu-label">
+            <h3>Información Personal</h3>
+            <p>Edita tus datos básicos y de contacto</p>
+          </ion-label>
+          <ion-icon name="chevron-forward-outline" slot="end" class="menu-arrow"></ion-icon>
+        </ion-item>
+
+        <ion-item lines="none" class="premium-list-item">
+          <div class="icon-circle-bg green" slot="start">
+            <ion-icon name="document-text-outline"></ion-icon>
+          </div>
+          <ion-label class="menu-label">
+            <h3>Historial Médico</h3>
+            <p>Diagnósticos, alergias y recetas médicas</p>
+          </ion-label>
+          <ion-icon name="chevron-forward-outline" slot="end" class="menu-arrow"></ion-icon>
+        </ion-item>
+
+        <ion-item lines="none" class="premium-list-item last">
+          <div class="icon-circle-bg orange" slot="start">
+            <ion-icon name="card-outline"></ion-icon>
+          </div>
+          <ion-label class="menu-label">
+            <h3>Métodos de Pago</h3>
+            <p>Administra tus tarjetas de facturación</p>
+          </ion-label>
+          <ion-icon name="chevron-forward-outline" slot="end" class="menu-arrow"></ion-icon>
+        </ion-item>
+      </div>
+    </div>
+
+    <!-- SECCIÓN: PREFERENCIAS -->
+    <div class="menu-group-section">
+      <h2 class="section-title">Preferencias</h2>
+      
+      <div class="premium-list-wrapper">
+        <ion-item lines="none" class="premium-list-item">
+          <div class="icon-circle-bg purple" slot="start">
+            <ion-icon name="notifications-outline"></ion-icon>
+          </div>
+          <ion-label class="menu-label">
+            <h3>Notificaciones</h3>
+            <p>Recordatorios de citas y medicamentos</p>
+          </ion-label>
+          <ion-icon name="chevron-forward-outline" slot="end" class="menu-arrow"></ion-icon>
+        </ion-item>
+
+        <ion-item lines="none" class="premium-list-item">
+          <div class="icon-circle-bg teal" slot="start">
+            <ion-icon name="shield-checkmark-outline"></ion-icon>
+          </div>
+          <ion-label class="menu-label">
+            <h3>Privacidad y Seguridad</h3>
+            <p>Configura tu PIN de seguridad y accesos</p>
+          </ion-label>
+          <ion-icon name="chevron-forward-outline" slot="end" class="menu-arrow"></ion-icon>
+        </ion-item>
+
+        <ion-item lines="none" class="premium-list-item last">
+          <div class="icon-circle-bg rose" slot="start">
+            <ion-icon name="help-circle-outline"></ion-icon>
+          </div>
+          <ion-label class="menu-label">
+            <h3>Ayuda y Soporte</h3>
+            <p>Preguntas frecuentes y soporte técnico</p>
+          </ion-label>
+          <ion-icon name="chevron-forward-outline" slot="end" class="menu-arrow"></ion-icon>
+        </ion-item>
+      </div>
+    </div>
+
+    <!-- CERRAR SESIÓN -->
+    <div class="logout-btn-container">
+      <ion-button expand="block" color="danger" class="logout-premium-btn" (click)="logout()">
+        <ion-icon name="log-out-outline" slot="start"></ion-icon>
+        Cerrar Sesión
+      </ion-button>
+    </div>
+  </div>
+</ion-content>

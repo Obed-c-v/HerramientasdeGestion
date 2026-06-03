@@ -1,0 +1,7 @@
+{
+  "name": "parkinsong",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}

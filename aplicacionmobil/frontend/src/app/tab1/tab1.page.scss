@@ -1,0 +1,507 @@
+/* ==========================================================================
+   HEADER & GENERAL LAYOUT
+   ========================================================================== */
+ion-content.app-content {
+  --background: #f8fafe;
+}
+
+.transparent-header {
+  --background: #0b2239;
+  --border-width: 0;
+  --box-shadow: none;
+
+  .header-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: -0.3px;
+  }
+
+  .info-btn {
+    --color: #ffffff;
+    opacity: 0.85;
+  }
+}
+
+/* ==========================================================================
+   HERO SECTION (DARK GRID PATTERN)
+   ========================================================================== */
+.hero-section {
+  background: #0b2239;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  background-size: 22px 22px;
+  padding: 16px 20px 48px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.hero-intro {
+  .hero-subtitle {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    color: #a1b3c9;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  .hero-title {
+    font-size: 24px;
+    font-weight: 800;
+    color: #ffffff;
+    margin: 0;
+    letter-spacing: -0.5px;
+  }
+}
+
+/* ==========================================================================
+   QUOTE GLASS CARD (GLASSMORPHISM)
+   ========================================================================== */
+.quote-glass-card {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  padding: 18px;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+.quote-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+
+  .quote-icon-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .quote-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: #a1b3c9;
+  }
+}
+
+.quote-text {
+  font-size: 15px;
+  font-weight: 600;
+  color: #ffffff;
+  line-height: 1.5;
+  margin: 0 0 14px;
+  letter-spacing: -0.2px;
+}
+
+.quote-footer {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: #a1b3c9;
+  font-weight: 500;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding-top: 10px;
+
+  ion-icon {
+    font-size: 14px;
+    color: #3685f6;
+  }
+}
+
+/* ==========================================================================
+   MAIN CONTENT SECTION (SLIDING WHITE CARD)
+   ========================================================================== */
+.main-card-section {
+  background: #f8fafe;
+  border-radius: 28px 28px 0 0;
+  margin-top: -24px;
+  padding: 24px 20px 40px;
+  min-height: calc(100vh - 240px);
+  position: relative;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.header-instruction {
+  margin-bottom: 24px;
+
+  h3 {
+    font-size: 15px;
+    font-weight: 700;
+    color: #0b2239;
+    margin: 0 0 6px;
+  }
+
+  p {
+    font-size: 12.5px;
+    color: #5e6e82;
+    margin: 0;
+    line-height: 1.5;
+  }
+}
+
+/* ==========================================================================
+   RECORD INTERACTIVE AREA
+   ========================================================================== */
+.record-interactive-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 0 30px;
+  position: relative;
+  min-height: 220px;
+}
+
+/* MICROPHONE PULSE WAVE ANIMATIONS */
+.pulse-container {
+  position: relative;
+  width: 140px;
+  height: 140px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
+}
+
+.mic-button {
+  --background: linear-gradient(135deg, #3685f6, #6366f1);
+  --box-shadow: 0 8px 24px rgba(54, 133, 246, 0.35);
+  --color: #ffffff;
+  width: 76px;
+  height: 76px;
+  margin: 0;
+  z-index: 10;
+
+  ion-icon {
+    font-size: 30px;
+  }
+}
+
+.pulse-ring {
+  position: absolute;
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  background: rgba(54, 133, 246, 0.15);
+  animation: pulseWaves 2.8s infinite cubic-bezier(0.215, 0.61, 0.355, 1);
+  z-index: 1;
+
+  &.ring-2 {
+    animation-delay: 0.9s;
+  }
+
+  &.ring-3 {
+    animation-delay: 1.8s;
+  }
+}
+
+@keyframes pulseWaves {
+  0% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(2.2);
+    opacity: 0;
+  }
+}
+
+/* HINT PULSE */
+.record-hint {
+  text-align: center;
+  margin-top: 8px;
+
+  p {
+    font-size: 13px;
+    font-weight: 600;
+    color: #5e6e82;
+    margin: 0;
+
+    &.hint-pulse {
+      animation: hintFading 1.8s infinite alternate;
+    }
+
+    &.success-text {
+      color: #2dd36f;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-weight: 700;
+
+      ion-icon {
+        font-size: 16px;
+      }
+    }
+  }
+}
+
+@keyframes hintFading {
+  0% { opacity: 0.5; }
+  100% { opacity: 1; }
+}
+
+/* RECORDING PILL BAR */
+.recording-bar-container {
+  width: 100%;
+  max-width: 290px;
+  margin-bottom: 16px;
+  animation: slideInPill 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slideInPill {
+  from { transform: scale(0.9); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.recording-pill {
+  background: #0b2239;
+  border-radius: 40px;
+  padding: 8px 10px 8px 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 8px 24px rgba(11, 34, 57, 0.2);
+}
+
+.timer-section {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  .rec-dot {
+    width: 8px;
+    height: 8px;
+    background: #eb445a;
+    border-radius: 50%;
+    animation: blkRed 1s infinite;
+  }
+
+  @keyframes blkRed {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  .timer-txt {
+    color: #ffffff;
+    font-family: monospace;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+  }
+}
+
+.actions-section {
+  display: flex;
+  gap: 2px;
+}
+
+.rec-action-btn {
+  --color: #ffffff;
+  --padding-start: 8px;
+  --padding-end: 8px;
+  margin: 0;
+  opacity: 0.8;
+
+  ion-icon {
+    font-size: 18px;
+  }
+
+  &.stop-action-btn {
+    --color: #eb445a;
+    opacity: 1;
+  }
+
+  &.close-action-btn {
+    --color: #a1b3c9;
+  }
+}
+
+/* CUSTOM AUDIO PLAYER WRAPPER */
+.audio-player-container {
+  width: 100%;
+  max-width: 320px;
+  margin-top: 18px;
+  animation: slideInPill 0.3s ease-out;
+}
+
+.custom-audio-wrapper {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+
+  .audio-icon {
+    font-size: 20px;
+    color: #3685f6;
+    flex-shrink: 0;
+  }
+
+  .custom-audio-player {
+    flex: 1;
+    height: 32px;
+    outline: none;
+  }
+}
+
+/* ANALYSIS LOADER BOX */
+.analysis-loading-box {
+  background: #ffffff;
+  border: 1px solid #eef2f8;
+  border-radius: 20px;
+  padding: 22px;
+  width: 100%;
+  max-width: 320px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.03);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-top: 18px;
+  animation: slideInPill 0.3s ease-out;
+
+  .spinner-circle-loader {
+    margin-bottom: 12px;
+    
+    ion-spinner {
+      --color: #3685f6;
+      width: 36px;
+      height: 36px;
+    }
+  }
+
+  .loader-title {
+    font-size: 13.5px;
+    font-weight: 700;
+    color: #0b2239;
+    margin: 0 0 4px;
+  }
+
+  .loader-desc {
+    font-size: 11px;
+    color: #64748b;
+    margin: 0;
+    line-height: 1.4;
+  }
+}
+
+/* ==========================================================================
+   ANALYSIS HISTORY SECTION (RECENT CARDS)
+   ========================================================================== */
+.analysis-history-section {
+  margin-top: 12px;
+}
+
+.history-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+
+  .section-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #0b2239;
+    margin: 0;
+    letter-spacing: -0.2px;
+  }
+
+  .history-count {
+    font-size: 11px;
+    color: #64748b;
+    font-weight: 600;
+  }
+}
+
+.analysis-cards-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.history-item-card {
+  background: #ffffff;
+  border: 1px solid #eef2f8;
+  border-radius: 16px;
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 4px 12px rgba(54, 133, 246, 0.02);
+
+  .history-item-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    ion-icon {
+      font-size: 18px;
+    }
+
+    &.normal {
+      background: rgba(45, 211, 111, 0.08);
+      color: #2dd36f;
+    }
+
+    &.warning {
+      background: rgba(255, 159, 10, 0.08);
+      color: #ff9f0a;
+    }
+  }
+
+  .history-item-info {
+    flex: 1;
+    min-width: 0;
+
+    .history-date {
+      font-size: 13px;
+      font-weight: 700;
+      color: #0b2239;
+      margin: 0 0 2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .history-duration {
+      font-size: 11px;
+      color: #5e6e82;
+      margin: 0;
+    }
+  }
+
+  .history-badge {
+    font-size: 10px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    flex-shrink: 0;
+
+    &.success {
+      background: rgba(45, 211, 111, 0.08);
+      color: #27ae60;
+    }
+
+    &.warning {
+      background: rgba(255, 159, 10, 0.08);
+      color: #ff9f0a;
+    }
+  }
+}

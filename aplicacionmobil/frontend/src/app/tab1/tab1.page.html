@@ -1,0 +1,163 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar class="transparent-header">
+    <ion-title class="header-title">Detección por Voz</ion-title>
+    <ion-buttons slot="end">
+      <ion-button class="info-btn">
+        <ion-icon name="information-circle-outline" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="app-content">
+  <!-- SECCIÓN HÉROE OSCURA CON CUADRÍCULA -->
+  <div class="hero-section">
+    <div class="hero-intro">
+      <span class="hero-subtitle">MÓDULO DE DIAGNÓSTICO</span>
+      <h1 class="hero-title">Prueba de voz</h1>
+    </div>
+
+    <!-- TARJETA TRANSLÚCIDA CON FRASE A LEER (GLASSMORPHISM) -->
+    <div class="quote-glass-card">
+      <div class="quote-header">
+        <div class="quote-icon-container">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 16.5C11.17 16.5 10.5 15.83 10.5 15C10.5 14.17 11.17 13.5 12 13.5C12.83 13.5 13.5 14.17 13.5 15C13.5 15.83 12.83 16.5 12 16.5ZM13 11H11V7H13V11Z" fill="#7ab8ff"/>
+          </svg>
+        </div>
+        <span class="quote-label">EJERCICIO DE FONACIÓN CLÍNICA</span>
+      </div>
+      
+      <p class="quote-text">
+        "Toma aire profundamente y sostén el sonido de la vocal 'A' (ej. 'aaaaaaaa...') de forma clara y prolongada por al menos 5 segundos."
+      </p>
+
+      <div class="quote-footer">
+        <ion-icon name="volume-medium-outline"></ion-icon>
+        <span>Mantén un tono de voz y volumen constantes sin forzar</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECCIÓN PRINCIPAL BLANCA QUE SUBE -->
+  <div class="main-card-section">
+    <div class="header-instruction">
+      <h3>Instrucciones de grabación</h3>
+      <p>Sitúate en un entorno silencioso, mantén el celular a unos 20 cm de tu rostro y presiona el micrófono para iniciar la prueba.</p>
+    </div>
+
+    <!-- ÁREA DE GRABACIÓN INTERACTIVA -->
+    <div class="record-interactive-area">
+      <!-- Botón de grabación con ondas de pulso -->
+      <div class="pulse-container" *ngIf="!isRecording">
+        <div class="pulse-ring ring-1"></div>
+        <div class="pulse-ring ring-2"></div>
+        <div class="pulse-ring ring-3"></div>
+        
+        <ion-fab-button class="mic-button" (click)="startRecording()">
+          <ion-icon name="mic"></ion-icon>
+        </ion-fab-button>
+      </div>
+
+      <!-- Barra de grabación activa flotante estilo píldora -->
+      <div class="recording-bar-container" *ngIf="isRecording">
+        <div class="recording-pill">
+          <div class="timer-section">
+            <span class="rec-dot"></span>
+            <span class="timer-txt">{{ formatDuration(recordingDuration) }}</span>
+          </div>
+          
+          <div class="actions-section">
+            <ion-button fill="clear" class="rec-action-btn" (click)="recordingDuration = 0">
+              <ion-icon name="refresh"></ion-icon>
+            </ion-button>
+            
+            <ion-button fill="clear" class="rec-action-btn stop-action-btn" (click)="stopRecording()">
+              <ion-icon name="square"></ion-icon>
+            </ion-button>
+            
+            <ion-button fill="clear" class="rec-action-btn close-action-btn" (click)="cancelRecording()">
+              <ion-icon name="close"></ion-icon>
+            </ion-button>
+          </div>
+        </div>
+      </div>
+
+      <div class="record-hint">
+        <p *ngIf="!isRecording && !audioUrl" class="hint-pulse">Toca el micrófono para comenzar</p>
+        <p *ngIf="!isRecording && audioUrl" class="success-text">
+          <ion-icon name="checkmark-circle-sharp"></ion-icon> ¡Grabación guardada correctamente!
+        </p>
+      </div>
+
+      <!-- Reproductor de audio estilizado -->
+      <div class="audio-player-container" *ngIf="audioUrl && !isRecording">
+        <div class="custom-audio-wrapper">
+          <ion-icon name="musical-notes-outline" class="audio-icon"></ion-icon>
+          <audio [src]="audioUrl" controls class="custom-audio-player"></audio>
+        </div>
+      </div>
+
+      <!-- Spinner sofisticado de análisis en progreso -->
+      <div class="analysis-loading-box" *ngIf="isAnalyzing">
+        <div class="spinner-circle-loader">
+          <ion-spinner name="crescent"></ion-spinner>
+        </div>
+        <p class="loader-title">Analizando frecuencias vocales...</p>
+        <p class="loader-desc">Extrayendo variaciones de tono, temblores y ruido (Jitter y Shimmer)</p>
+      </div>
+    </div>
+
+    <!-- SECCIÓN DE HISTORIAL DE ANÁLISIS RECIENTES -->
+    <div class="analysis-history-section">
+      <div class="history-header">
+        <h2 class="section-title">Análisis Recientes</h2>
+        <span class="history-count">Últimos 30 días</span>
+      </div>
+
+      <div class="analysis-cards-list">
+        <!-- Tarjeta 1 -->
+        <div class="history-item-card">
+          <div class="history-item-icon normal">
+            <ion-icon name="checkmark-circle-outline"></ion-icon>
+          </div>
+          <div class="history-item-info">
+            <h3 class="history-date">Ayer, 10:30 AM</h3>
+            <p class="history-duration">Duración de prueba: 15 seg</p>
+          </div>
+          <div class="history-badge success">
+            Normal
+          </div>
+        </div>
+
+        <!-- Tarjeta 2 -->
+        <div class="history-item-card">
+          <div class="history-item-icon normal">
+            <ion-icon name="checkmark-circle-outline"></ion-icon>
+          </div>
+          <div class="history-item-info">
+            <h3 class="history-date">12 de Octubre, 04:15 PM</h3>
+            <p class="history-duration">Duración de prueba: 14 seg</p>
+          </div>
+          <div class="history-badge success">
+            Normal
+          </div>
+        </div>
+
+        <!-- Tarjeta 3 -->
+        <div class="history-item-card">
+          <div class="history-item-icon warning">
+            <ion-icon name="alert-circle-outline"></ion-icon>
+          </div>
+          <div class="history-item-info">
+            <h3 class="history-date">10 de Octubre, 09:20 AM</h3>
+            <p class="history-duration">Duración de prueba: 16 seg</p>
+          </div>
+          <div class="history-badge warning">
+            Atención
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ion-content>

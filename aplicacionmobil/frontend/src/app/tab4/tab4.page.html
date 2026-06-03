@@ -1,0 +1,215 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar class="transparent-header">
+    <ion-title class="header-title">Métricas de Salud</ion-title>
+    <ion-buttons slot="end">
+      <ion-button class="share-btn">
+        <ion-icon name="share-social-outline" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="app-content">
+  <!-- SECCIÓN HÉROE OSCURA CON CUADRÍCULA -->
+  <div class="hero-section">
+    <div class="hero-intro">
+      <span class="hero-subtitle">ESTADÍSTICAS GENERALES</span>
+      <h1 class="hero-title">Tu salud vocal</h1>
+    </div>
+
+    <!-- TARJETA DE RESUMEN DE PUNTUACIÓN (CSS RING) -->
+    <div class="score-glass-card">
+      <div class="score-card-layout">
+        <!-- Anillo circular de puntuación vocal -->
+        <div class="circular-progress-box">
+          <div class="circle-outer">
+            <div class="circle-inner">
+              <span class="score-number">78</span>
+              <span class="score-max">/100</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="score-details-info">
+          <div class="score-status-badge attention">
+            <span class="badge-dot"></span>
+            Estado: Atención
+          </div>
+          <h2 class="score-lbl-title">Salud vocal general</h2>
+          <p class="score-desc-txt">Tu voz se encuentra en un nivel intermedio estable. Registras buenas métricas pero recomendamos ejercitar a diario.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECCIÓN PRINCIPAL BLANCA QUE SUBE -->
+  <div class="main-card-section">
+    
+    <!-- CARD DINÁMICO DEL ÚLTIMO ANÁLISIS DE VOZ (DESDE TAB 1) -->
+    <div class="last-analysis-premium-card" *ngIf="analysisResult" [ngClass]="analysisResult.status">
+      <div class="card-glow-bg"></div>
+      <div class="analysis-card-body">
+        <div class="analysis-status-header">
+          <div class="header-left">
+            <ion-icon [name]="analysisResult.status === 'success' ? 'checkmark-circle' : 'alert-circle'" class="status-main-icon"></ion-icon>
+            <span class="diag-lbl">ÚLTIMO DIAGNÓSTICO EN TIEMPO REAL</span>
+          </div>
+          <ion-button fill="clear" color="dark" class="close-card-btn" (click)="archivarAnalisis()">
+            <ion-icon name="archive-outline" slot="start"></ion-icon> Archivar
+          </ion-button>
+        </div>
+
+        <h2 class="diagnosis-title">{{ analysisResult.title }}</h2>
+        <p class="diagnosis-desc">{{ analysisResult.description }}</p>
+
+        <!-- Métricas específicas extraídas -->
+        <div class="extracted-features-grid">
+          <div class="extracted-feature-pill" *ngFor="let feat of analysisResult.features" [ngClass]="feat.color">
+            <ion-icon [name]="feat.icon"></ion-icon>
+            <span class="feat-nme">{{ feat.name }}:</span>
+            <span class="feat-vle">{{ feat.value }}</span>
+          </div>
+        </div>
+
+        <div class="disclaimer-row">
+          <ion-icon name="shield-checkmark-outline"></ion-icon>
+          <span>Análisis completado · Algoritmo de espectrograma Spark</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- MÉTRICAS PRINCIPALES -->
+    <div class="metrics-grid-intro">
+      <h2 class="section-title">Métricas de control</h2>
+      <span class="update-lbl">Actualizado hoy</span>
+    </div>
+
+    <div class="metrics-2x2-grid">
+      <!-- Estabilidad Card -->
+      <div class="metric-grid-card">
+        <div class="metric-card-header">
+          <span class="metric-card-title">Estabilidad vocal</span>
+          <div class="metric-icon-box blue">
+            <ion-icon name="pulse-outline"></ion-icon>
+          </div>
+        </div>
+        <div class="metric-main-value">82%</div>
+        
+        <!-- Mini barra de progreso delgada -->
+        <div class="mini-progress-track">
+          <div class="mini-progress-fill blue" style="width: 82%"></div>
+        </div>
+        
+        <span class="metric-trend-badge good">
+          <ion-icon name="arrow-up-outline"></ion-icon> Mejor que la semana pasada
+        </span>
+      </div>
+
+      <!-- Temblor Vocal Card -->
+      <div class="metric-grid-card">
+        <div class="metric-card-header">
+          <span class="metric-card-title">Temblor vocal</span>
+          <div class="metric-icon-box green">
+            <ion-icon name="wifi-outline"></ion-icon>
+          </div>
+        </div>
+        <div class="metric-main-value">Bajo</div>
+        
+        <!-- Mini barra de progreso delgada -->
+        <div class="mini-progress-track">
+          <div class="mini-progress-fill green" style="width: 25%"></div>
+        </div>
+        
+        <span class="metric-trend-badge optimal">
+          <span class="bullet optimal"></span> Control óptimo del temblor
+        </span>
+      </div>
+
+      <!-- Claridad del Habla Card -->
+      <div class="metric-grid-card">
+        <div class="metric-card-header">
+          <span class="metric-card-title">Claridad de habla</span>
+          <div class="metric-icon-box orange">
+            <ion-icon name="sparkles-outline"></ion-icon>
+          </div>
+        </div>
+        <div class="metric-main-value">76%</div>
+        
+        <!-- Mini barra de progreso delgada -->
+        <div class="mini-progress-track">
+          <div class="mini-progress-fill orange" style="width: 76%"></div>
+        </div>
+        
+        <span class="metric-trend-badge warn">
+          <span class="bullet warn"></span> Requiere atención suave
+        </span>
+      </div>
+
+      <!-- Riesgo Estimado Card -->
+      <div class="metric-grid-card">
+        <div class="metric-card-header">
+          <span class="metric-card-title">Riesgo estimado</span>
+          <div class="metric-icon-box purple">
+            <ion-icon name="shield-outline"></ion-icon>
+          </div>
+        </div>
+        <div class="metric-main-value">28%</div>
+        
+        <!-- Mini barra de progreso delgada -->
+        <div class="mini-progress-track">
+          <div class="mini-progress-fill purple" style="width: 28%"></div>
+        </div>
+        
+        <span class="metric-trend-badge optimal">
+          <span class="bullet optimal"></span> Probabilidad muy baja
+        </span>
+      </div>
+    </div>
+
+    <!-- DETALLES TÉCNICOS DE LA VOZ -->
+    <div class="technical-details-section">
+      <div class="tech-header">
+        <h2 class="section-title">Espectrograma de la voz</h2>
+        <p class="tech-desc">Métricas avanzadas procesadas por el analizador de voz del dispositivo.</p>
+      </div>
+
+      <div class="tech-list-cards">
+        <!-- Item 1: Jitter -->
+        <div class="tech-list-item">
+          <div class="tech-item-info">
+            <h4>Variación de tono (Jitter)</h4>
+            <p>Mide si la frecuencia fundamental de tu voz oscila de manera involuntaria.</p>
+          </div>
+          <span class="tech-status-badge stable">Estable</span>
+        </div>
+
+        <!-- Item 2: Shimmer -->
+        <div class="tech-list-item">
+          <div class="tech-item-info">
+            <h4>Variación de volumen (Shimmer)</h4>
+            <p>Monitorea si tu voz sufre micro-cambios bruscos en la intensidad del sonido.</p>
+          </div>
+          <span class="tech-status-badge moderate">Moderado</span>
+        </div>
+
+        <!-- Item 3: HNR -->
+        <div class="tech-list-item">
+          <div class="tech-item-info">
+            <h4>Ruido en la voz (HNR)</h4>
+            <p>Proporción entre la señal armónica de tu voz y el aire o ruido no vocalizado.</p>
+          </div>
+          <span class="tech-status-badge optimal">Bajo (Óptimo)</span>
+        </div>
+
+        <!-- Item 4: F0 -->
+        <div class="tech-list-item">
+          <div class="tech-item-info">
+            <h4>Frecuencia Base (F0)</h4>
+            <p>Tono general y altura melódica base sostenida en hercios durante la vocalización.</p>
+          </div>
+          <span class="tech-status-badge trend">Estable</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</ion-content>

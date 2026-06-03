@@ -1,0 +1,554 @@
+/* ==========================================================================
+   HEADER & GENERAL LAYOUT
+   ========================================================================== */
+ion-content.app-content {
+  --background: #f8fafe;
+}
+
+.transparent-header {
+  --background: #0b2239;
+  --border-width: 0;
+  --box-shadow: none;
+
+  .header-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: -0.3px;
+  }
+
+  .share-btn {
+    --color: #ffffff;
+    opacity: 0.85;
+  }
+}
+
+/* ==========================================================================
+   HERO SECTION (DARK GRID PATTERN)
+   ========================================================================== */
+.hero-section {
+  background: #0b2239;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  background-size: 22px 22px;
+  padding: 16px 20px 48px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.hero-intro {
+  .hero-subtitle {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    color: #a1b3c9;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  .hero-title {
+    font-size: 24px;
+    font-weight: 800;
+    color: #ffffff;
+    margin: 0;
+    letter-spacing: -0.5px;
+  }
+}
+
+/* ==========================================================================
+   SCORE GLASS CARD (WITH CSS CIRCULAR PROGRESS)
+   ========================================================================== */
+.score-glass-card {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  padding: 18px;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+.score-card-layout {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+/* ANILLO CIRCULAR EN CSS CONIC GRADIENT */
+.circular-progress-box {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.circle-outer {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: conic-gradient(#3685f6 78%, rgba(255, 255, 255, 0.1) 0);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 14px rgba(54, 133, 246, 0.2);
+}
+
+.circle-inner {
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  background: #0b2239;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.score-number {
+  font-size: 22px;
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1;
+}
+
+.score-max {
+  font-size: 10px;
+  color: #a1b3c9;
+  font-weight: 700;
+  margin-top: 1px;
+}
+
+.score-details-info {
+  flex: 1;
+  min-width: 0;
+
+  .score-status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+
+    &.attention {
+      background: rgba(255, 159, 10, 0.18);
+      color: #ffb03a;
+      border: 1px solid rgba(255, 159, 10, 0.25);
+    }
+  }
+
+  .badge-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #ff9f0a;
+    box-shadow: 0 0 4px #ff9f0a;
+  }
+
+  .score-lbl-title {
+    color: #ffffff;
+    font-size: 15px;
+    font-weight: 700;
+    margin: 0 0 4px;
+  }
+
+  .score-desc-txt {
+    color: #a1b3c9;
+    font-size: 11.5px;
+    margin: 0;
+    line-height: 1.4;
+  }
+}
+
+/* ==========================================================================
+   MAIN CONTENT SECTION (SLIDING WHITE CARD)
+   ========================================================================== */
+.main-card-section {
+  background: #f8fafe;
+  border-radius: 28px 28px 0 0;
+  margin-top: -24px;
+  padding: 24px 20px 40px;
+  min-height: calc(100vh - 240px);
+  position: relative;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+/* ==========================================================================
+   LAST ANALYSIS PREMIUM DIAGNOSIS CARD
+   ========================================================================== */
+.last-analysis-premium-card {
+  border-radius: 20px;
+  padding: 18px;
+  margin-bottom: 26px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.04);
+  animation: slideDown 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  border: 1.5px solid transparent;
+
+  &.success {
+    background: #eefbf3;
+    border-color: rgba(45, 211, 111, 0.2);
+    
+    .status-main-icon, .diagnosis-title, .diag-lbl {
+      color: #27ae60;
+    }
+  }
+
+  &.warning {
+    background: #fff9eb;
+    border-color: rgba(255, 159, 10, 0.2);
+    
+    .status-main-icon, .diagnosis-title, .diag-lbl {
+      color: #e67e22;
+    }
+  }
+
+  &.danger {
+    background: #fdf2f4;
+    border-color: rgba(235, 68, 90, 0.2);
+    
+    .status-main-icon, .diagnosis-title, .diag-lbl {
+      color: #c0392b;
+    }
+  }
+}
+
+@keyframes slideDown {
+  from { transform: translateY(-20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.analysis-card-body {
+  position: relative;
+  z-index: 2;
+}
+
+.analysis-status-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+
+  .header-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .status-main-icon {
+    font-size: 20px;
+  }
+
+  .diag-lbl {
+    font-size: 9.5px;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+  }
+
+  .close-card-btn {
+    --color: #64748b;
+    --padding-start: 6px;
+    --padding-end: 6px;
+    font-size: 11px;
+    font-weight: 700;
+    margin: 0;
+  }
+}
+
+.diagnosis-title {
+  font-size: 18px;
+  font-weight: 800;
+  margin: 0 0 6px;
+  letter-spacing: -0.3px;
+}
+
+.diagnosis-desc {
+  font-size: 12.5px;
+  color: #475569;
+  margin: 0 0 16px;
+  line-height: 1.5;
+}
+
+.extracted-features-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.extracted-feature-pill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border-radius: 14px;
+  font-size: 11px;
+  font-weight: 700;
+
+  ion-icon {
+    font-size: 13px;
+  }
+
+  &.success {
+    background: rgba(45, 211, 111, 0.1);
+    color: #27ae60;
+  }
+
+  &.warning {
+    background: rgba(255, 159, 10, 0.1);
+    color: #e67e22;
+  }
+
+  &.danger {
+    background: rgba(235, 68, 90, 0.1);
+    color: #c0392b;
+  }
+}
+
+.disclaimer-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10.5px;
+  color: #64748b;
+  font-weight: 500;
+  border-top: 1px solid rgba(0, 0, 0, 0.04);
+  padding-top: 10px;
+
+  ion-icon {
+    font-size: 13px;
+    color: #3685f6;
+  }
+}
+
+/* ==========================================================================
+   METRICS SECTION (2X2 GRID)
+   ========================================================================== */
+.metrics-grid-intro {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+
+  .section-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #0b2239;
+    margin: 0;
+    letter-spacing: -0.2px;
+  }
+
+  .update-lbl {
+    font-size: 11px;
+    color: #64748b;
+    font-weight: 600;
+  }
+}
+
+.metrics-2x2-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-bottom: 28px;
+}
+
+.metric-grid-card {
+  background: #ffffff;
+  border: 1px solid #eef2f8;
+  border-radius: 20px;
+  padding: 16px;
+  box-shadow: 0 4px 12px rgba(54, 133, 246, 0.01);
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+.metric-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+  gap: 8px;
+
+  .metric-card-title {
+    font-size: 11.5px;
+    font-weight: 700;
+    color: #64748b;
+    line-height: 1.3;
+  }
+
+  .metric-icon-box {
+    width: 26px;
+    height: 26px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    ion-icon {
+      font-size: 14px;
+    }
+
+    &.blue { background: rgba(54, 133, 246, 0.08); color: #3685f6; }
+    &.green { background: rgba(45, 211, 111, 0.08); color: #2dd36f; }
+    &.orange { background: rgba(255, 159, 10, 0.08); color: #ff9f0a; }
+    &.purple { background: rgba(163, 114, 251, 0.08); color: #a372fb; }
+  }
+}
+
+.metric-main-value {
+  font-size: 24px;
+  font-weight: 800;
+  color: #0b2239;
+  margin-bottom: 8px;
+  line-height: 1;
+}
+
+/* MINI PROGRESO DELGADO */
+.mini-progress-track {
+  width: 100%;
+  height: 4px;
+  background: #f1f5f9;
+  border-radius: 2px;
+  margin-bottom: 10px;
+  overflow: hidden;
+}
+
+.mini-progress-fill {
+  height: 100%;
+  border-radius: 2px;
+
+  &.blue { background: #3685f6; }
+  &.green { background: #2dd36f; }
+  &.orange { background: #ff9f0a; }
+  &.purple { background: #a372fb; }
+}
+
+.metric-trend-badge {
+  font-size: 9.5px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+
+  ion-icon {
+    font-size: 11px;
+  }
+
+  &.good {
+    color: #27ae60;
+  }
+
+  &.optimal {
+    color: #3685f6;
+  }
+
+  &.warn {
+    color: #ff9f0a;
+  }
+
+  .bullet {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    display: inline-block;
+
+    &.optimal { background: #2dd36f; }
+    &.warn { background: #ff9f0a; }
+  }
+}
+
+/* ==========================================================================
+   TECHNICAL DETAILS SECTION (ESPECTROGRAMA LIST)
+   ========================================================================== */
+.technical-details-section {
+  margin-top: 10px;
+}
+
+.tech-header {
+  margin-bottom: 18px;
+
+  .tech-desc {
+    font-size: 12px;
+    color: #5e6e82;
+    margin: 4px 0 0;
+    line-height: 1.4;
+  }
+}
+
+.tech-list-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.tech-list-item {
+  background: #ffffff;
+  border: 1px solid #eef2f8;
+  border-radius: 16px;
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.01);
+}
+
+.tech-item-info {
+  flex: 1;
+  min-width: 0;
+
+  h4 {
+    font-size: 13px;
+    font-weight: 700;
+    color: #0b2239;
+    margin: 0 0 3px;
+  }
+
+  p {
+    font-size: 11px;
+    color: #5e6e82;
+    margin: 0;
+    line-height: 1.4;
+  }
+}
+
+.tech-status-badge {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  flex-shrink: 0;
+
+  &.stable {
+    background: rgba(45, 211, 111, 0.08);
+    color: #27ae60;
+  }
+
+  &.moderate {
+    background: rgba(255, 159, 10, 0.08);
+    color: #ff9f0a;
+  }
+
+  &.optimal {
+    background: rgba(54, 133, 246, 0.08);
+    color: #3685f6;
+  }
+
+  &.trend {
+    background: rgba(163, 114, 251, 0.08);
+    color: #a372fb;
+  }
+}

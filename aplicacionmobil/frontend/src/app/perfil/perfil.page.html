@@ -1,0 +1,104 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Mi Perfil</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="cargarPerfil()" fill="clear">
+        <ion-icon name="refresh-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <!-- ESTADO CARGANDO -->
+  <div *ngIf="cargando" style="text-align: center; margin-top: 48px;">
+    <ion-spinner name="crescent" color="primary"></ion-spinner>
+    <p style="color: #64748b; margin-top: 12px;">Cargando tu perfil...</p>
+  </div>
+
+  <!-- ERROR -->
+  <div *ngIf="!cargando && error" style="text-align: center; margin-top: 48px;">
+    <ion-icon name="alert-circle-outline" style="font-size: 48px; color: #ef4444;"></ion-icon>
+    <p style="color: #64748b; margin-top: 8px;">{{ error }}</p>
+    <ion-button expand="block" fill="outline" (click)="cargarPerfil()">Reintentar</ion-button>
+  </div>
+
+  <!-- PERFIL DEL PACIENTE -->
+  <div *ngIf="!cargando && !error && usuario">
+
+    <!-- AVATAR + NOMBRE -->
+    <div style="text-align: center; padding: 24px 0 16px 0;">
+      <div style="
+        width: 84px; height: 84px; border-radius: 50%;
+        background: linear-gradient(135deg, #004a99, #0070cc);
+        display: flex; align-items: center; justify-content: center;
+        margin: 0 auto 12px auto;
+        box-shadow: 0 4px 16px rgba(0, 74, 153, 0.3);
+      ">
+        <ion-icon name="person" style="font-size: 40px; color: white;"></ion-icon>
+      </div>
+      <h2 style="margin: 0; font-size: 22px; font-weight: 700; color: #0f172a;">
+        {{ usuario.nombre }} {{ usuario.apellido }}
+      </h2>
+      <p style="margin: 4px 0 0 0; color: #64748b; font-size: 14px;">Paciente</p>
+    </div>
+
+    <!-- TARJETA DE INFORMACIÓN -->
+    <ion-card style="border-radius: 16px; box-shadow: 0 2px 12px rgba(0,0,0,0.08); margin: 0 0 16px 0;">
+      <ion-card-header>
+        <ion-card-subtitle style="font-weight: 600; text-transform: uppercase; font-size: 11px; color: #94a3b8; letter-spacing: 1px;">
+          Información Personal
+        </ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content style="padding-top: 0;">
+
+        <ion-item lines="full" style="--padding-start: 0;">
+          <ion-icon name="mail-outline" slot="start" color="primary"></ion-icon>
+          <ion-label>
+            <p style="font-size: 11px; color: #94a3b8; margin-bottom: 2px;">Correo electrónico</p>
+            <h3 style="font-size: 14px; color: #1e293b;">{{ usuario.email }}</h3>
+          </ion-label>
+        </ion-item>
+
+        <ion-item lines="full" style="--padding-start: 0;" *ngIf="usuario.telefono">
+          <ion-icon name="call-outline" slot="start" color="primary"></ion-icon>
+          <ion-label>
+            <p style="font-size: 11px; color: #94a3b8; margin-bottom: 2px;">Teléfono</p>
+            <h3 style="font-size: 14px; color: #1e293b;">{{ usuario.telefono }}</h3>
+          </ion-label>
+        </ion-item>
+
+        <ion-item lines="full" style="--padding-start: 0;" *ngIf="usuario.fecha_nacimiento">
+          <ion-icon name="calendar-outline" slot="start" color="primary"></ion-icon>
+          <ion-label>
+            <p style="font-size: 11px; color: #94a3b8; margin-bottom: 2px;">Fecha de nacimiento</p>
+            <h3 style="font-size: 14px; color: #1e293b;">{{ fechaNacimiento }} ({{ edad }})</h3>
+          </ion-label>
+        </ion-item>
+
+        <ion-item lines="none" style="--padding-start: 0;" *ngIf="usuario.diagnostico_inicial">
+          <ion-icon name="medical-outline" slot="start" color="primary"></ion-icon>
+          <ion-label class="ion-text-wrap">
+            <p style="font-size: 11px; color: #94a3b8; margin-bottom: 2px;">Diagnóstico inicial</p>
+            <h3 style="font-size: 14px; color: #1e293b; white-space: normal;">{{ usuario.diagnostico_inicial }}</h3>
+          </ion-label>
+        </ion-item>
+
+      </ion-card-content>
+    </ion-card>
+
+    <!-- BOTÓN CERRAR SESIÓN -->
+    <ion-button
+      expand="block"
+      color="danger"
+      fill="outline"
+      style="margin-top: 16px; border-radius: 12px; --border-radius: 12px;"
+      (click)="logout()">
+      <ion-icon name="log-out-outline" slot="start"></ion-icon>
+      Cerrar Sesión
+    </ion-button>
+
+  </div>
+
+</ion-content>

@@ -1,0 +1,1095 @@
+/* ==========================================================================
+   HEADER
+   ========================================================================== */
+ion-content.app-content {
+  --background: #f8fafe;
+}
+
+.transparent-header {
+  --background: #0b2239;
+  --border-width: 0;
+  --box-shadow: none;
+}
+
+.header-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: -0.3px;
+}
+
+.notif-btn {
+  --color: #ffffff;
+  --padding-end: 8px;
+  opacity: 0.85;
+}
+
+/* ==========================================================================
+   HERO SECTION (PRÓXIMA CITA DESTACADA)
+   ========================================================================== */
+.hero-section {
+  background: #0b2239;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+  background-size: 22px 22px;
+  padding: 12px 16px 48px;
+}
+
+.hero-card {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 20px;
+  padding: 16px;
+  backdrop-filter: blur(8px);
+}
+
+.hero-top-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.hero-label-pill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  color: #a1b3c9;
+  text-transform: uppercase;
+}
+
+.hero-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #2dd36f;
+  box-shadow: 0 0 6px #2dd36f;
+  animation: blink 1.8s infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+.hero-days-badge {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(54,133,246,0.15);
+  color: #7ab8ff;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 20px;
+  border: 1px solid rgba(54,133,246,0.2);
+}
+
+.hero-doctor-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.hero-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,0.15);
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.hero-doctor-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.hero-doctor-name {
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 700;
+  margin: 0 0 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.hero-doctor-spec {
+  color: #a1b3c9;
+  font-size: 12px;
+  margin: 0;
+}
+
+.hero-type-badge {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 5px 10px;
+  border-radius: 20px;
+  background: rgba(54,133,246,0.18);
+  color: #7ab8ff;
+  border: 1px solid rgba(54,133,246,0.25);
+  flex-shrink: 0;
+
+  ion-icon { font-size: 13px; }
+
+  &.video {
+    background: rgba(45,211,111,0.12);
+    color: #5ee89e;
+    border-color: rgba(45,211,111,0.2);
+  }
+}
+
+.hero-datetime-row {
+  display: flex;
+  align-items: center;
+  background: rgba(255,255,255,0.06);
+  border-radius: 12px;
+  padding: 10px 14px;
+  margin-bottom: 14px;
+  gap: 0;
+}
+
+.hero-datetime-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex: 1;
+  color: #d0dff0;
+  font-size: 13px;
+  font-weight: 600;
+
+  ion-icon {
+    color: #3685f6;
+    font-size: 16px;
+  }
+}
+
+.hero-datetime-divider {
+  width: 1px;
+  height: 20px;
+  background: rgba(255,255,255,0.1);
+  margin: 0 14px;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.hero-action-btn {
+  flex: 1;
+  height: 40px;
+  border-radius: 12px;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  outline: none;
+  font-family: inherit;
+  transition: opacity 0.2s;
+
+  ion-icon { font-size: 16px; }
+
+  &.secondary {
+    background: rgba(255,255,255,0.08);
+    color: #a1b3c9;
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+
+  &.primary {
+    background: #3685f6;
+    color: #ffffff;
+    box-shadow: 0 4px 12px rgba(54,133,246,0.3);
+  }
+
+  &:active { opacity: 0.8; }
+}
+
+.hero-empty {
+  text-align: center;
+  padding: 20px 16px;
+
+  .hero-empty-icon {
+    font-size: 48px;
+    color: rgba(255,255,255,0.2);
+    display: block;
+    margin-bottom: 12px;
+  }
+
+  .hero-empty-text {
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0 0 6px;
+  }
+
+  .hero-empty-sub {
+    color: #a1b3c9;
+    font-size: 13px;
+    margin: 0;
+    line-height: 1.4;
+  }
+}
+
+/* ==========================================================================
+   CUERPO PRINCIPAL (BLANCO)
+   ========================================================================== */
+.main-body {
+  background: #ffffff;
+  border-radius: 28px 28px 0 0;
+  margin-top: -24px;
+  padding: 24px 16px 40px;
+  min-height: 60vh;
+  position: relative;
+  z-index: 10;
+  box-shadow: 0 -6px 24px rgba(11,34,57,0.08);
+}
+
+/* ==========================================================================
+   BOTÓN AGENDAR
+   ========================================================================== */
+.schedule-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  background: #eaf2ff;
+  border: 1.5px dashed #a8c8ff;
+  border-radius: 18px;
+  padding: 14px 16px;
+  cursor: pointer;
+  outline: none;
+  margin-bottom: 24px;
+  text-align: left;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+
+  &:active {
+    background: #d6e8ff;
+    transform: scale(0.99);
+  }
+}
+
+.schedule-btn-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  background: #3685f6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 6px 14px rgba(54,133,246,0.25);
+
+  ion-icon {
+    font-size: 24px;
+    color: #ffffff;
+  }
+}
+
+.schedule-btn-text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+
+  .schedule-btn-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: #0b2239;
+  }
+
+  .schedule-btn-sub {
+    font-size: 12px;
+    color: #3685f6;
+    font-weight: 500;
+    margin-top: 2px;
+  }
+}
+
+.schedule-btn-arrow {
+  font-size: 18px;
+  color: #3685f6;
+  flex-shrink: 0;
+}
+
+/* ==========================================================================
+   TOGGLE LISTA
+   ========================================================================== */
+.list-toggle-row {
+  display: flex;
+  gap: 0;
+  background: #f8fafe;
+  border-radius: 14px;
+  padding: 4px;
+  margin-bottom: 16px;
+  border: 1px solid #f2f5fa;
+}
+
+.list-toggle-btn {
+  flex: 1;
+  height: 38px;
+  border: none;
+  background: transparent;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #788ca6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  cursor: pointer;
+  outline: none;
+  font-family: inherit;
+  transition: all 0.25s ease;
+
+  &.active {
+    background: #ffffff;
+    color: #0b2239;
+    box-shadow: 0 2px 8px rgba(11,34,57,0.06);
+  }
+}
+
+.list-toggle-count {
+  background: #3685f6;
+  color: #ffffff;
+  font-size: 10px;
+  font-weight: 700;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ==========================================================================
+   TARJETAS DE CITA
+   ========================================================================== */
+.appt-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  background: #f8fafe;
+  border-radius: 16px;
+  padding: 14px;
+  margin-bottom: 12px;
+  border: 1px solid #f2f5fa;
+  transition: transform 0.15s ease;
+
+  &:active { transform: scale(0.99); }
+
+  &.history {
+    opacity: 0.8;
+  }
+}
+
+.appt-avatar {
+  width: 46px;
+  height: 46px;
+  border-radius: 14px;
+  object-fit: cover;
+  flex-shrink: 0;
+  border: 1.5px solid #e8eef7;
+}
+
+.appt-card-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.appt-card-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.appt-doctor {
+  font-size: 14px;
+  font-weight: 700;
+  color: #0b2239;
+  margin: 0 0 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.appt-specialty {
+  font-size: 11.5px;
+  color: #788ca6;
+  margin: 0;
+}
+
+.appt-type-pill {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 10.5px;
+  font-weight: 700;
+  padding: 3px 9px;
+  border-radius: 20px;
+  flex-shrink: 0;
+  background: #eaf2ff;
+  color: #3685f6;
+
+  ion-icon { font-size: 12px; }
+
+  &.video {
+    background: #e3f9ed;
+    color: #2dd36f;
+  }
+}
+
+.history-status-pill {
+  font-size: 10.5px;
+  font-weight: 700;
+  padding: 3px 9px;
+  border-radius: 20px;
+  flex-shrink: 0;
+
+  &.completed {
+    background: #e3f9ed;
+    color: #2dd36f;
+  }
+
+  &.cancelled {
+    background: #fff0f0;
+    color: #ff4b4b;
+  }
+}
+
+.appt-datetime {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.appt-dt-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11.5px;
+  color: #788ca6;
+  font-weight: 500;
+
+  ion-icon { font-size: 13px; color: #3685f6; }
+}
+
+.appt-dt-divider {
+  color: #c2cdd8;
+  font-size: 12px;
+}
+
+.appt-cancel-btn {
+  background: transparent;
+  border: none;
+  color: #788ca6;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  cursor: pointer;
+  outline: none;
+  flex-shrink: 0;
+  border-radius: 8px;
+
+  &:active { background: #f2f5fa; }
+}
+
+.empty-list-state {
+  text-align: center;
+  padding: 32px 16px;
+  color: #9baec2;
+
+  ion-icon {
+    font-size: 40px;
+    display: block;
+    margin-bottom: 12px;
+    color: #c2cdd8;
+  }
+
+  p {
+    font-size: 13px;
+    font-weight: 500;
+    margin: 0;
+  }
+}
+
+/* ==========================================================================
+   PASTILLERO - NEXT DOSE CARD
+   ========================================================================== */
+.section-label {
+  font-size: 15px;
+  font-weight: 700;
+  color: #0b2239;
+  margin: 24px 0 12px 2px;
+}
+
+.pill-next-card {
+  background: linear-gradient(135deg, #1a3a5c, #0b2239);
+  border-radius: 20px;
+  padding: 18px;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: -20px;
+    right: -20px;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: rgba(54,133,246,0.15);
+  }
+}
+
+.pill-next-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.pill-next-label-row {
+  display: flex;
+  align-items: center;
+}
+
+.pill-next-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  color: #a1b3c9;
+  text-transform: uppercase;
+}
+
+.pill-next-timer {
+  display: flex;
+  align-items: baseline;
+  gap: 3px;
+}
+
+.pill-timer-num {
+  font-size: 24px;
+  font-weight: 800;
+  color: #3685f6;
+}
+
+.pill-timer-unit {
+  font-size: 12px;
+  color: #a1b3c9;
+  font-weight: 500;
+}
+
+.pill-next-name {
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 700;
+  margin: 0 0 4px;
+}
+
+.pill-next-detail {
+  color: #a1b3c9;
+  font-size: 12px;
+  margin: 0 0 16px;
+}
+
+.pill-mark-btn {
+  background: rgba(54,133,246,0.2);
+  color: #7ab8ff;
+  border: 1px solid rgba(54,133,246,0.3);
+  border-radius: 12px;
+  height: 42px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  outline: none;
+  font-family: inherit;
+  transition: all 0.2s;
+
+  ion-icon { font-size: 18px; }
+
+  &:active {
+    background: rgba(54,133,246,0.35);
+  }
+}
+
+/* ==========================================================================
+   MODAL (BOTTOM SHEET)
+   ========================================================================== */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(11,34,57,0.55);
+  backdrop-filter: blur(4px);
+  z-index: 1000;
+  display: flex;
+  align-items: flex-end;
+  animation: overlayIn 0.25s ease;
+}
+
+@keyframes overlayIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.modal-sheet {
+  background: #ffffff;
+  border-radius: 28px 28px 0 0;
+  width: 100%;
+  max-height: 88vh;
+  overflow-y: auto;
+  padding: 12px 20px 40px;
+  animation: sheetUp 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  box-sizing: border-box;
+}
+
+@keyframes sheetUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+.modal-handle {
+  width: 40px;
+  height: 4px;
+  background: #e2e8f0;
+  border-radius: 2px;
+  margin: 0 auto 18px;
+}
+
+.modal-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.modal-title-area {
+  .modal-title {
+    font-size: 20px;
+    font-weight: 800;
+    color: #0b2239;
+    margin: 0 0 2px;
+  }
+  .modal-subtitle {
+    font-size: 12px;
+    color: #788ca6;
+    margin: 0;
+  }
+}
+
+.modal-close-btn {
+  background: #f8fafe;
+  border: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #788ca6;
+  font-size: 20px;
+  outline: none;
+
+  &:active { background: #f2f5fa; }
+}
+
+/* Barra de progreso de pasos */
+.steps-progress-bar {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 24px;
+}
+
+.step-segment {
+  flex: 1;
+  height: 4px;
+  border-radius: 2px;
+  background: #f2f5fa;
+  transition: background 0.3s ease;
+
+  &.done, &.active {
+    background: #3685f6;
+  }
+}
+
+/* Etiquetas de paso */
+.step-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: #0b2239;
+  margin: 0 0 12px;
+}
+
+/* Paso 1: Grid de especialidades */
+.specialty-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 4px;
+}
+
+.specialty-chip {
+  background: #f8fafe;
+  border: 1.5px solid #f2f5fa;
+  border-radius: 14px;
+  padding: 12px 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  cursor: pointer;
+  outline: none;
+  font-family: inherit;
+  text-align: left;
+  transition: all 0.2s ease;
+
+  span {
+    font-size: 12.5px;
+    font-weight: 600;
+    color: #1a273e;
+  }
+
+  &.selected {
+    background: #eaf2ff;
+    border-color: #3685f6;
+  }
+}
+
+.specialty-chip-icon {
+  font-size: 22px;
+  color: #3685f6;
+}
+
+/* Paso 1: Lista de doctores */
+.doctor-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.doctor-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #f8fafe;
+  border: 1.5px solid #f2f5fa;
+  border-radius: 14px;
+  padding: 10px 12px;
+  cursor: pointer;
+  outline: none;
+  font-family: inherit;
+  text-align: left;
+  width: 100%;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+
+  &.selected {
+    background: #eaf2ff;
+    border-color: #3685f6;
+  }
+}
+
+.doctor-row-avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  object-fit: cover;
+  flex-shrink: 0;
+  border: 1.5px solid #e8eef7;
+}
+
+.doctor-row-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+
+  .doctor-row-name {
+    font-size: 13.5px;
+    font-weight: 700;
+    color: #0b2239;
+    display: block;
+  }
+
+  .doctor-row-spec {
+    font-size: 11.5px;
+    color: #788ca6;
+    display: block;
+    margin-top: 2px;
+  }
+}
+
+.doctor-row-check {
+  ion-icon { font-size: 22px; color: #3685f6; }
+  flex-shrink: 0;
+}
+
+/* Paso 2: Input fecha */
+.date-input-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #f8fafe;
+  border: 1.5px solid #f2f5fa;
+  border-radius: 14px;
+  padding: 0 14px;
+  height: 50px;
+
+  ion-icon {
+    font-size: 20px;
+    color: #3685f6;
+    flex-shrink: 0;
+  }
+}
+
+.date-native-input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  font-size: 14px;
+  font-weight: 500;
+  color: #0b2239;
+  outline: none;
+  font-family: inherit;
+  height: 100%;
+}
+
+/* Paso 2: Chips de horario */
+.time-chips-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.time-chip {
+  height: 40px;
+  border-radius: 12px;
+  border: 1.5px solid #f2f5fa;
+  background: #f8fafe;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #1a273e;
+  cursor: pointer;
+  outline: none;
+  font-family: inherit;
+  transition: all 0.2s ease;
+
+  &.selected {
+    background: #3685f6;
+    color: #ffffff;
+    border-color: #3685f6;
+    box-shadow: 0 4px 10px rgba(54,133,246,0.25);
+  }
+}
+
+/* Paso 3: Tipo de consulta */
+.type-cards-row {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.type-card {
+  flex: 1;
+  background: #f8fafe;
+  border: 1.5px solid #f2f5fa;
+  border-radius: 18px;
+  padding: 18px 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  cursor: pointer;
+  outline: none;
+  font-family: inherit;
+  text-align: left;
+  position: relative;
+  transition: all 0.2s ease;
+
+  &.selected {
+    background: #eaf2ff;
+    border-color: #3685f6;
+  }
+}
+
+.type-card-icon {
+  width: 46px;
+  height: 46px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 8px;
+
+  ion-icon { font-size: 24px; }
+
+  &.video {
+    background: #e3f9ed;
+    ion-icon { color: #2dd36f; }
+  }
+
+  &.office {
+    background: #eaf2ff;
+    ion-icon { color: #3685f6; }
+  }
+}
+
+.type-card-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: #0b2239;
+  display: block;
+}
+
+.type-card-sub {
+  font-size: 11px;
+  color: #788ca6;
+  display: block;
+}
+
+.type-card-check {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  ion-icon { font-size: 20px; color: #3685f6; }
+}
+
+/* Caja de resumen */
+.summary-box {
+  background: #f8fafe;
+  border-radius: 16px;
+  padding: 14px 16px;
+  border: 1px solid #f2f5fa;
+
+  .summary-title {
+    font-size: 12px;
+    font-weight: 700;
+    color: #788ca6;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin: 0 0 12px;
+  }
+}
+
+.summary-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+  font-size: 13px;
+  color: #1a273e;
+  font-weight: 500;
+
+  &:last-child { margin-bottom: 0; }
+
+  ion-icon { font-size: 16px; color: #3685f6; flex-shrink: 0; }
+}
+
+/* ── Botones de navegación del modal ── */
+.modal-nav-row {
+  display: flex;
+  gap: 10px;
+  margin-top: 24px;
+}
+
+.modal-back-btn {
+  height: 50px;
+  padding: 0 18px;
+  border-radius: 14px;
+  border: 1.5px solid #f2f5fa;
+  background: #f8fafe;
+  color: #788ca6;
+  font-size: 14px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  outline: none;
+  font-family: inherit;
+
+  ion-icon { font-size: 18px; }
+
+  &:active { background: #f2f5fa; }
+}
+
+.modal-next-btn, .modal-save-btn {
+  flex: 1;
+  height: 50px;
+  border-radius: 14px;
+  border: none;
+  background: #3685f6;
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  cursor: pointer;
+  outline: none;
+  font-family: inherit;
+  box-shadow: 0 6px 16px rgba(54,133,246,0.3);
+  transition: all 0.2s ease;
+
+  ion-icon { font-size: 18px; }
+
+  &:disabled {
+    background: #e2e8f0;
+    color: #94a3b8;
+    box-shadow: none;
+    cursor: not-allowed;
+  }
+
+  &:active:not(:disabled) { transform: scale(0.98); }
+}
+
+.modal-save-btn {
+  background: #2dd36f;
+  box-shadow: 0 6px 16px rgba(45,211,111,0.25);
+}
+
+/* ==========================================================================
+   ANIMACIONES
+   ========================================================================== */
+.animate-fade-in {
+  animation: fadeInUp 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.modal-step {
+  min-height: 200px;
+}

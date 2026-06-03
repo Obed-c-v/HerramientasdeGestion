@@ -1,0 +1,455 @@
+<ion-content class="app-login-content" [scrollEvents]="true">
+  <!-- SECCIÓN DE CABECERA OSCURA CON GRID -->
+  <div class="login-header-section">
+    <div class="logo-circle">
+      <ion-icon name="pulse-outline" class="logo-icon"></ion-icon>
+    </div>
+    
+    <div class="header-text-container">
+      <h1 class="header-title" *ngIf="authStep === 'LOGIN'">
+        {{ esRegistro ? 'Crear Cuenta' : 'Bienvenido' }}
+      </h1>
+      <h1 class="header-title animate-fade-in" *ngIf="authStep === 'OTP'">
+        Verificación
+      </h1>
+      <h1 class="header-title animate-fade-in" *ngIf="authStep === 'CHANGE_PASSWORD'">
+        Cambio Obligatorio
+      </h1>
+      
+      <p class="header-subtitle" *ngIf="authStep === 'LOGIN'">
+        {{ esRegistro ? 'Completa tus datos de salud para comenzar.' : 'Inicia sesión para continuar tu registro médico.' }}
+      </p>
+      <p class="header-subtitle animate-fade-in" *ngIf="authStep === 'OTP'">
+        Ingresa el código enviado a tu correo.
+      </p>
+      <p class="header-subtitle animate-fade-in" *ngIf="authStep === 'CHANGE_PASSWORD'">
+        Por seguridad, establece tu contraseña definitiva.
+      </p>
+    </div>
+  </div>
+
+  <!-- SECCIÓN DE TARJETA PRINCIPAL (FORMULARIOS) -->
+  <div class="login-card-section">
+    
+    <!-- PANTALLA LOGIN & REGISTRO -->
+    <div *ngIf="authStep === 'LOGIN'" class="form-container">
+      <!-- CONTROL DE TABS / TOGGLE DESLIZABLE -->
+      <div class="toggle-pill-container">
+        <button type="button" class="toggle-pill-btn" [class.active]="!esRegistro" (click)="setModo(false)">
+          Iniciar Sesión
+        </button>
+        <button type="button" class="toggle-pill-btn" [class.active]="esRegistro" (click)="setModo(true)">
+          Crear Cuenta
+        </button>
+      </div>
+
+      <!-- FORMULARIO DE INICIO DE SESIÓN -->
+      <div *ngIf="!esRegistro" class="animate-fade-in">
+        <!-- CORREO -->
+        <div class="input-group-container" 
+             [class.is-invalid]="tocados['correo'] && errores['correo']" 
+             [class.is-valid]="tocados['correo'] && validos['correo']">
+          <span class="input-icon-box">
+            <ion-icon name="mail-outline"></ion-icon>
+          </span>
+          <input 
+            type="email" 
+            [(ngModel)]="correo" 
+            placeholder="Correo electrónico" 
+            (input)="validarCampo('correo')"
+            (blur)="marcarTocado('correo')"
+            class="custom-form-input"
+          />
+          <span class="validation-status-icon" *ngIf="tocados['correo']">
+            <ion-icon [name]="validos['correo'] ? 'checkmark-circle' : 'alert-circle'" 
+                      [class.valid-icon]="validos['correo']" 
+                      [class.invalid-icon]="!validos['correo']">
+            </ion-icon>
+          </span>
+        </div>
+        <div class="error-message-text" *ngIf="tocados['correo'] && errores['correo']">
+          {{ errores['correo'] }}
+        </div>
+
+        <!-- CONTRASEÑA -->
+        <div class="input-group-container" 
+             [class.is-invalid]="tocados['password'] && errores['password']" 
+             [class.is-valid]="tocados['password'] && validos['password']">
+          <span class="input-icon-box">
+            <ion-icon name="lock-closed-outline"></ion-icon>
+          </span>
+          <input 
+            [type]="verPassword ? 'text' : 'password'" 
+            [(ngModel)]="password" 
+            placeholder="Contraseña" 
+            (input)="validarCampo('password')"
+            (blur)="marcarTocado('password')"
+            class="custom-form-input"
+          />
+          <button type="button" class="password-toggle-btn" (click)="togglePassword()">
+            <ion-icon [name]="verPassword ? 'eye-off-outline' : 'eye-outline'"></ion-icon>
+          </button>
+        </div>
+        <div class="error-message-text" *ngIf="tocados['password'] && errores['password']">
+          {{ errores['password'] }}
+        </div>
+
+        <!-- OPCIONES ADICIONALES (RECORDAR / OLVIDÉ) -->
+        <div class="login-options-row">
+          <label class="remember-me-label">
+            <input type="checkbox" class="remember-me-checkbox">
+            <span class="remember-me-text">Recordarme</span>
+          </label>
+          <a class="forgot-password-link">¿Olvidaste tu contraseña?</a>
+        </div>
+
+        <!-- BOTÓN DE INICIO DE SESIÓN -->
+        <button 
+          type="button" 
+          class="submit-brand-btn" 
+          [disabled]="!esLoginValido || isLoading"
+          (click)="login()">
+          {{ isLoading ? 'Conectando...' : 'Iniciar Sesión' }}
+        </button>
+      </div>
+
+      <!-- FORMULARIO DE REGISTRO -->
+      <div *ngIf="esRegistro" class="animate-fade-in">
+        
+        <!-- PRIMER NOMBRE -->
+        <div class="input-group-container" 
+             [class.is-invalid]="tocados['primerNombre'] && errores['primerNombre']" 
+             [class.is-valid]="tocados['primerNombre'] && validos['primerNombre']">
+          <span class="input-icon-box">
+            <ion-icon name="person-outline"></ion-icon>
+          </span>
+          <input 
+            type="text" 
+            [(ngModel)]="primerNombre" 
+            placeholder="Primer nombre" 
+            (input)="validarCampo('primerNombre')"
+            (blur)="marcarTocado('primerNombre')"
+            class="custom-form-input"
+          />
+          <span class="validation-status-icon" *ngIf="tocados['primerNombre']">
+            <ion-icon [name]="validos['primerNombre'] ? 'checkmark-circle' : 'alert-circle'" 
+                      [class.valid-icon]="validos['primerNombre']" 
+                      [class.invalid-icon]="!validos['primerNombre']">
+            </ion-icon>
+          </span>
+        </div>
+        <div class="error-message-text" *ngIf="tocados['primerNombre'] && errores['primerNombre']">
+          {{ errores['primerNombre'] }}
+        </div>
+
+        <!-- SEGUNDO NOMBRE -->
+        <div class="input-group-container" 
+             [class.is-invalid]="tocados['segundoNombre'] && errores['segundoNombre']" 
+             [class.is-valid]="tocados['segundoNombre'] && validos['segundoNombre']">
+          <span class="input-icon-box">
+            <ion-icon name="person-outline"></ion-icon>
+          </span>
+          <input 
+            type="text" 
+            [(ngModel)]="segundoNombre" 
+            placeholder="Segundo nombre (Opcional)" 
+            (input)="validarCampo('segundoNombre')"
+            (blur)="marcarTocado('segundoNombre')"
+            class="custom-form-input"
+          />
+          <span class="validation-status-icon" *ngIf="tocados['segundoNombre'] && segundoNombre">
+            <ion-icon [name]="validos['segundoNombre'] ? 'checkmark-circle' : 'alert-circle'" 
+                      [class.valid-icon]="validos['segundoNombre']" 
+                      [class.invalid-icon]="!validos['segundoNombre']">
+            </ion-icon>
+          </span>
+        </div>
+        <div class="error-message-text" *ngIf="tocados['segundoNombre'] && errores['segundoNombre']">
+          {{ errores['segundoNombre'] }}
+        </div>
+
+        <!-- APELLIDO PATERNO -->
+        <div class="input-group-container" 
+             [class.is-invalid]="tocados['apellidoPaterno'] && errores['apellidoPaterno']" 
+             [class.is-valid]="tocados['apellidoPaterno'] && validos['apellidoPaterno']">
+          <span class="input-icon-box">
+            <ion-icon name="person-outline"></ion-icon>
+          </span>
+          <input 
+            type="text" 
+            [(ngModel)]="apellidoPaterno" 
+            placeholder="Apellido paterno" 
+            (input)="validarCampo('apellidoPaterno')"
+            (blur)="marcarTocado('apellidoPaterno')"
+            class="custom-form-input"
+          />
+          <span class="validation-status-icon" *ngIf="tocados['apellidoPaterno']">
+            <ion-icon [name]="validos['apellidoPaterno'] ? 'checkmark-circle' : 'alert-circle'" 
+                      [class.valid-icon]="validos['apellidoPaterno']" 
+                      [class.invalid-icon]="!validos['apellidoPaterno']">
+            </ion-icon>
+          </span>
+        </div>
+        <div class="error-message-text" *ngIf="tocados['apellidoPaterno'] && errores['apellidoPaterno']">
+          {{ errores['apellidoPaterno'] }}
+        </div>
+
+        <!-- APELLIDO MATERNO -->
+        <div class="input-group-container" 
+             [class.is-invalid]="tocados['apellidoMaterno'] && errores['apellidoMaterno']" 
+             [class.is-valid]="tocados['apellidoMaterno'] && validos['apellidoMaterno']">
+          <span class="input-icon-box">
+            <ion-icon name="person-outline"></ion-icon>
+          </span>
+          <input 
+            type="text" 
+            [(ngModel)]="apellidoMaterno" 
+            placeholder="Apellido materno" 
+            (input)="validarCampo('apellidoMaterno')"
+            (blur)="marcarTocado('apellidoMaterno')"
+            class="custom-form-input"
+          />
+          <span class="validation-status-icon" *ngIf="tocados['apellidoMaterno']">
+            <ion-icon [name]="validos['apellidoMaterno'] ? 'checkmark-circle' : 'alert-circle'" 
+                      [class.valid-icon]="validos['apellidoMaterno']" 
+                      [class.invalid-icon]="!validos['apellidoMaterno']">
+            </ion-icon>
+          </span>
+        </div>
+        <div class="error-message-text" *ngIf="tocados['apellidoMaterno'] && errores['apellidoMaterno']">
+          {{ errores['apellidoMaterno'] }}
+        </div>
+
+        <!-- CORREO -->
+        <div class="input-group-container" 
+             [class.is-invalid]="tocados['correo'] && errores['correo']" 
+             [class.is-valid]="tocados['correo'] && validos['correo']">
+          <span class="input-icon-box">
+            <ion-icon name="mail-outline"></ion-icon>
+          </span>
+          <input 
+            type="email" 
+            [(ngModel)]="correo" 
+            placeholder="Correo electrónico" 
+            (input)="validarCampo('correo')"
+            (blur)="marcarTocado('correo')"
+            class="custom-form-input"
+          />
+          <span class="validation-status-icon" *ngIf="tocados['correo']">
+            <ion-icon [name]="validos['correo'] ? 'checkmark-circle' : 'alert-circle'" 
+                      [class.valid-icon]="validos['correo']" 
+                      [class.invalid-icon]="!validos['correo']">
+            </ion-icon>
+          </span>
+        </div>
+        <div class="error-message-text" *ngIf="tocados['correo'] && errores['correo']">
+          {{ errores['correo'] }}
+        </div>
+
+        <!-- CONTRASEÑA -->
+        <div class="input-group-container" 
+             [class.is-invalid]="tocados['password'] && errores['password']" 
+             [class.is-valid]="tocados['password'] && validos['password']">
+          <span class="input-icon-box">
+            <ion-icon name="lock-closed-outline"></ion-icon>
+          </span>
+          <input 
+            [type]="verPassword ? 'text' : 'password'" 
+            [(ngModel)]="password" 
+            placeholder="Contraseña" 
+            (input)="validarCampo('password')"
+            (blur)="marcarTocado('password')"
+            class="custom-form-input"
+          />
+          <button type="button" class="password-toggle-btn" (click)="togglePassword()">
+            <ion-icon [name]="verPassword ? 'eye-off-outline' : 'eye-outline'"></ion-icon>
+          </button>
+        </div>
+        <div class="error-message-text" *ngIf="tocados['password'] && errores['password']">
+          {{ errores['password'] }}
+        </div>
+
+        <!-- EDAD -->
+        <div class="input-group-container" 
+             [class.is-invalid]="tocados['edad'] && errores['edad']" 
+             [class.is-valid]="tocados['edad'] && validos['edad']">
+          <span class="input-icon-box">
+            <ion-icon name="calendar-outline"></ion-icon>
+          </span>
+          <input 
+            type="number" 
+            [(ngModel)]="edad" 
+            placeholder="Edad" 
+            (input)="validarCampo('edad')"
+            (blur)="marcarTocado('edad')"
+            class="custom-form-input"
+          />
+          <span class="validation-status-icon" *ngIf="tocados['edad']">
+            <ion-icon [name]="validos['edad'] ? 'checkmark-circle' : 'alert-circle'" 
+                      [class.valid-icon]="validos['edad']" 
+                      [class.invalid-icon]="!validos['edad']">
+            </ion-icon>
+          </span>
+        </div>
+        <div class="error-message-text" *ngIf="tocados['edad'] && errores['edad']">
+          {{ errores['edad'] }}
+        </div>
+
+        <!-- SEXO -->
+        <div class="input-group-container select-container" 
+             [class.is-invalid]="tocados['sexo'] && errores['sexo']" 
+             [class.is-valid]="tocados['sexo'] && validos['sexo']">
+          <span class="input-icon-box">
+            <ion-icon name="transgender-outline"></ion-icon>
+          </span>
+          <select 
+            [(ngModel)]="sexo" 
+            (change)="validarCampo('sexo')"
+            (blur)="marcarTocado('sexo')"
+            class="custom-form-select">
+            <option value="" disabled selected>Selecciona tu sexo</option>
+            <option value="masculino">Masculino</option>
+            <option value="femenino">Femenino</option>
+          </select>
+        </div>
+        <div class="error-message-text" *ngIf="tocados['sexo'] && errores['sexo']">
+          {{ errores['sexo'] }}
+        </div>
+
+        <!-- BOTÓN DE REGISTRO -->
+        <button 
+          type="button" 
+          class="submit-brand-btn" 
+          [disabled]="!esRegistroValido"
+          (click)="registrar()">
+          Crear Cuenta
+        </button>
+      </div>
+    </div>
+
+    <!-- PANTALLA CAMBIO DE CONTRASEÑA -->
+    <div *ngIf="authStep === 'CHANGE_PASSWORD'" class="form-container animate-fade-in">
+      <!-- NUEVA CONTRASEÑA -->
+      <div class="input-group-container" 
+           [class.is-invalid]="tocados['newPassword'] && errores['newPassword']" 
+           [class.is-valid]="tocados['newPassword'] && validos['newPassword']">
+        <span class="input-icon-box">
+          <ion-icon name="lock-closed-outline"></ion-icon>
+        </span>
+        <input 
+          [type]="verNuevaPassword ? 'text' : 'password'" 
+          [(ngModel)]="newPassword" 
+          placeholder="Nueva contraseña" 
+          (input)="validarCampo('newPassword')"
+          (blur)="marcarTocado('newPassword')"
+          class="custom-form-input"
+        />
+        <button type="button" class="password-toggle-btn" (click)="verNuevaPassword = !verNuevaPassword">
+          <ion-icon [name]="verNuevaPassword ? 'eye-off-outline' : 'eye-outline'"></ion-icon>
+        </button>
+      </div>
+      <div class="error-message-text" *ngIf="tocados['newPassword'] && errores['newPassword']">
+        {{ errores['newPassword'] }}
+      </div>
+
+      <!-- CONFIRMAR CONTRASEÑA -->
+      <div class="input-group-container" 
+           [class.is-invalid]="tocados['confirmPassword'] && errores['confirmPassword']" 
+           [class.is-valid]="tocados['confirmPassword'] && validos['confirmPassword']">
+        <span class="input-icon-box">
+          <ion-icon name="lock-closed-outline"></ion-icon>
+        </span>
+        <input 
+          [type]="verNuevaPassword ? 'text' : 'password'" 
+          [(ngModel)]="confirmPassword" 
+          placeholder="Confirmar contraseña" 
+          (input)="validarCampo('confirmPassword')"
+          (blur)="marcarTocado('confirmPassword')"
+          class="custom-form-input"
+        />
+      </div>
+      <div class="error-message-text" *ngIf="tocados['confirmPassword'] && errores['confirmPassword']">
+        {{ errores['confirmPassword'] }}
+      </div>
+
+      <div class="mfa-actions-box mt-4">
+        <!-- BOTÓN CAMBIAR -->
+        <button 
+          type="button" 
+          class="submit-brand-btn verify-btn" 
+          [disabled]="!esCambioPasswordValido || isLoading"
+          (click)="cambiarPassword()">
+          {{ isLoading ? 'Guardando...' : 'Guardar y Entrar' }}
+        </button>
+
+        <button 
+          type="button" 
+          class="cancel-clear-btn" 
+          (click)="cancelarMFA()">
+          Volver
+        </button>
+      </div>
+    </div>
+
+    <!-- PANTALLA VERIFICACIÓN DE CÓDIGO (OTP) -->
+    <div *ngIf="authStep === 'OTP'" class="mfa-container animate-fade-in">
+      <div class="mfa-icon-shield">
+        <ion-icon name="shield-checkmark-outline"></ion-icon>
+      </div>
+      
+      <p class="mfa-instructions">
+        Por seguridad, introduce el código de verificación que hemos enviado a <b>{{ correo }}</b>.
+      </p>
+
+      <!-- CASILLAS INDIVIDUALES DEL CÓDIGO (6 DÍGITOS) -->
+      <div class="mfa-digits-wrapper">
+        <input 
+          *ngFor="let digit of [0,1,2,3,4,5]; let i = index" 
+          id="mfa-digit-{{i}}" 
+          type="text" 
+          inputmode="numeric" 
+          pattern="[0-9]*" 
+          maxlength="1" 
+          class="mfa-digit-box"
+          [(ngModel)]="codigoMFAArray[i]"
+          (keyup)="onMfaKeyUp($event, i)"
+          (focus)="onMfaFocus($event)"
+          placeholder="-"
+          autocomplete="off"
+        />
+      </div>
+
+      <p class="mfa-timer-info" *ngIf="!isLoading">
+        ¿El código expiró o no te llegó?
+      </p>
+
+      <div class="mfa-actions-box">
+        <button 
+          type="button" 
+          class="submit-brand-btn verify-btn" 
+          [disabled]="codigoMFA.length !== 6 || isLoading"
+          (click)="verificarMFA()">
+          {{ isLoading ? 'Verificando...' : 'Verificar e Ingresar' }}
+        </button>
+
+        <button 
+          type="button" 
+          class="submit-brand-btn verify-btn" 
+          style="background-color: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; margin-top: 12px; margin-bottom: 12px;"
+          [disabled]="isLoading"
+          (click)="reenviarOTP()">
+          <ion-icon name="mail-outline" style="margin-right: 8px;"></ion-icon>
+          {{ isLoading ? 'Enviando...' : 'Reenviar Código' }}
+        </button>
+        
+        <button 
+          type="button" 
+          class="cancel-clear-btn" 
+          (click)="cancelarMFA()">
+          Volver al Login
+        </button>
+      </div>
+    </div>
+
+  </div>
+</ion-content>

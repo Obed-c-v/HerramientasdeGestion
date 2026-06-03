@@ -1,0 +1,344 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar class="transparent-header">
+    <ion-title class="header-title">Citas Médicas</ion-title>
+    <ion-buttons slot="end">
+      <ion-button class="notif-btn">
+        <ion-icon name="notifications-outline" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="app-content" [scrollEvents]="true">
+
+  <!-- SECCIÓN HERO: PRÓXIMA CITA DESTACADA -->
+  <div class="hero-section">
+    <div class="hero-card" *ngIf="proximasCitas.length > 0; else noProximaCita">
+      <div class="hero-top-row">
+        <div class="hero-label-pill">
+          <div class="hero-dot"></div>
+          PRÓXIMA CITA
+        </div>
+        <span class="hero-days-badge">
+          <ion-icon name="time-outline"></ion-icon>
+          Pronto
+        </span>
+      </div>
+
+      <div class="hero-doctor-row">
+        <img class="hero-avatar" [src]="'https://i.pravatar.cc/80?img=' + proximasCitas[0].avatarId" [alt]="proximasCitas[0].doctor" />
+        <div class="hero-doctor-info">
+          <h2 class="hero-doctor-name">{{ proximasCitas[0].doctor }}</h2>
+          <p class="hero-doctor-spec">{{ proximasCitas[0].specialty }}</p>
+        </div>
+        <div class="hero-type-badge" [class.video]="proximasCitas[0].type === 'Videollamada'">
+          <ion-icon [name]="proximasCitas[0].type === 'Videollamada' ? 'videocam-outline' : 'business-outline'"></ion-icon>
+          {{ proximasCitas[0].type }}
+        </div>
+      </div>
+
+      <div class="hero-datetime-row">
+        <div class="hero-datetime-item">
+          <ion-icon name="calendar-outline"></ion-icon>
+          <span>{{ proximasCitas[0].dateFormatted }}</span>
+        </div>
+        <div class="hero-datetime-divider"></div>
+        <div class="hero-datetime-item">
+          <ion-icon name="time-outline"></ion-icon>
+          <span>{{ proximasCitas[0].time }}</span>
+        </div>
+      </div>
+
+      <div class="hero-actions">
+        <button type="button" class="hero-action-btn secondary">
+          <ion-icon name="close-outline"></ion-icon>
+          Cancelar
+        </button>
+        <button type="button" class="hero-action-btn primary">
+          <ion-icon name="refresh-outline"></ion-icon>
+          Reprogramar
+        </button>
+      </div>
+    </div>
+
+    <ng-template #noProximaCita>
+      <div class="hero-empty">
+        <ion-icon name="calendar-outline" class="hero-empty-icon"></ion-icon>
+        <p class="hero-empty-text">No tienes citas próximas</p>
+        <p class="hero-empty-sub">Agenda una cita para comenzar tu seguimiento médico</p>
+      </div>
+    </ng-template>
+  </div>
+
+  <!-- CUERPO PRINCIPAL (TARJETA BLANCA) -->
+  <div class="main-body">
+
+    <!-- BOTÓN AGENDAR -->
+    <button type="button" class="schedule-btn" (click)="openModal()">
+      <div class="schedule-btn-icon">
+        <ion-icon name="add-outline"></ion-icon>
+      </div>
+      <div class="schedule-btn-text">
+        <span class="schedule-btn-title">Agendar Nueva Cita</span>
+        <span class="schedule-btn-sub">Especialistas disponibles hoy</span>
+      </div>
+      <ion-icon name="chevron-forward-outline" class="schedule-btn-arrow"></ion-icon>
+    </button>
+
+    <!-- TOGGLE LISTA: PRÓXIMAS / HISTORIAL -->
+    <div class="list-toggle-row">
+      <button type="button" class="list-toggle-btn" [class.active]="activeTab === 'proximas'" (click)="activeTab = 'proximas'">
+        Próximas
+        <span class="list-toggle-count" *ngIf="proximasCitas.length > 0">{{ proximasCitas.length }}</span>
+      </button>
+      <button type="button" class="list-toggle-btn" [class.active]="activeTab === 'historial'" (click)="activeTab = 'historial'">
+        Historial
+      </button>
+    </div>
+
+    <!-- LISTA DE PRÓXIMAS CITAS -->
+    <div *ngIf="activeTab === 'proximas'">
+      <div *ngIf="proximasCitas.length === 0" class="empty-list-state">
+        <ion-icon name="calendar-clear-outline"></ion-icon>
+        <p>No hay citas programadas</p>
+      </div>
+
+      <div class="appt-card" *ngFor="let c of proximasCitas; let i = index">
+        <div class="appt-card-left">
+          <img class="appt-avatar" [src]="'https://i.pravatar.cc/80?img=' + c.avatarId" [alt]="c.doctor" />
+        </div>
+        <div class="appt-card-body">
+          <div class="appt-card-top">
+            <div>
+              <p class="appt-doctor">{{ c.doctor }}</p>
+              <p class="appt-specialty">{{ c.specialty }}</p>
+            </div>
+            <span class="appt-type-pill" [class.video]="c.type === 'Videollamada'">
+              <ion-icon [name]="c.type === 'Videollamada' ? 'videocam-outline' : 'business-outline'"></ion-icon>
+              {{ c.type }}
+            </span>
+          </div>
+          <div class="appt-datetime">
+            <span class="appt-dt-item">
+              <ion-icon name="calendar-outline"></ion-icon>
+              {{ c.dateFormatted }}
+            </span>
+            <span class="appt-dt-divider">·</span>
+            <span class="appt-dt-item">
+              <ion-icon name="time-outline"></ion-icon>
+              {{ c.time }}
+            </span>
+          </div>
+        </div>
+        <button type="button" class="appt-cancel-btn" (click)="cancelAppointment(i)">
+          <ion-icon name="ellipsis-vertical"></ion-icon>
+        </button>
+      </div>
+    </div>
+
+    <!-- HISTORIAL -->
+    <div *ngIf="activeTab === 'historial'">
+      <div *ngIf="filteredHistorial.length === 0" class="empty-list-state">
+        <ion-icon name="time-outline"></ion-icon>
+        <p>Sin historial de citas</p>
+      </div>
+
+      <div class="appt-card history" *ngFor="let c of filteredHistorial">
+        <div class="appt-card-left">
+          <img class="appt-avatar" [src]="'https://i.pravatar.cc/80?img=' + c.avatarId" [alt]="c.doctor" />
+        </div>
+        <div class="appt-card-body">
+          <div class="appt-card-top">
+            <div>
+              <p class="appt-doctor">{{ c.doctor }}</p>
+              <p class="appt-specialty">{{ c.specialty }}</p>
+            </div>
+            <span class="history-status-pill" [class.completed]="c.status === 'completada'" [class.cancelled]="c.status === 'cancelada'">
+              {{ c.status === 'completada' ? 'Completada' : 'Cancelada' }}
+            </span>
+          </div>
+          <div class="appt-datetime">
+            <span class="appt-dt-item">
+              <ion-icon name="calendar-outline"></ion-icon>
+              {{ c.dateFormatted }}
+            </span>
+            <span class="appt-dt-divider">·</span>
+            <span class="appt-dt-item">
+              <ion-icon name="time-outline"></ion-icon>
+              {{ c.time }}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PASTILLERO NEXT DOSE -->
+    <div class="section-label">Mi Pastillero</div>
+    <div class="pill-next-card">
+      <div class="pill-next-header">
+        <div class="pill-next-label-row">
+          <span class="pill-next-label">PRÓXIMA TOMA</span>
+        </div>
+        <div class="pill-next-timer">
+          <span class="pill-timer-num">{{ nextPillMinutes }}</span>
+          <span class="pill-timer-unit">min</span>
+        </div>
+      </div>
+      <h3 class="pill-next-name">{{ nextPillName }}</h3>
+      <p class="pill-next-detail">{{ nextPillDetail }}</p>
+      <button type="button" class="pill-mark-btn">
+        <ion-icon name="checkmark-outline"></ion-icon>
+        Marcar como tomado
+      </button>
+    </div>
+
+  </div><!-- /main-body -->
+
+</ion-content>
+
+<!-- ====================================================================
+     MODAL: AGENDAR CITA (MULTI-PASO)
+     ==================================================================== -->
+<div class="modal-overlay" *ngIf="showModal" (click)="closeModal()">
+  <div class="modal-sheet" (click)="$event.stopPropagation()">
+
+    <!-- Handle visual -->
+    <div class="modal-handle"></div>
+
+    <!-- Cabecera del modal -->
+    <div class="modal-header">
+      <div class="modal-title-area">
+        <h2 class="modal-title">Nueva Cita</h2>
+        <p class="modal-subtitle">Paso {{ currentStep }} de 3</p>
+      </div>
+      <button type="button" class="modal-close-btn" (click)="closeModal()">
+        <ion-icon name="close-outline"></ion-icon>
+      </button>
+    </div>
+
+    <!-- Barra de progreso de pasos -->
+    <div class="steps-progress-bar">
+      <div class="step-segment" [class.done]="currentStep >= 1" [class.active]="currentStep === 1"></div>
+      <div class="step-segment" [class.done]="currentStep >= 2" [class.active]="currentStep === 2"></div>
+      <div class="step-segment" [class.done]="currentStep >= 3" [class.active]="currentStep === 3"></div>
+    </div>
+
+    <!-- ── PASO 1: Especialidad y Doctor ── -->
+    <div *ngIf="currentStep === 1" class="modal-step animate-fade-in">
+      <p class="step-label">Elige una especialidad</p>
+      <div class="specialty-grid">
+        <button type="button" class="specialty-chip" *ngFor="let s of specialties"
+                [class.selected]="newAppointment.specialty === s.name"
+                (click)="selectSpecialty(s.name)">
+          <ion-icon [name]="s.icon" class="specialty-chip-icon"></ion-icon>
+          <span>{{ s.name }}</span>
+        </button>
+      </div>
+
+      <p class="step-label" style="margin-top:24px">Elige un doctor</p>
+      <div class="doctor-list">
+        <button type="button" class="doctor-row" *ngFor="let d of getFilteredDoctors()"
+                [class.selected]="newAppointment.doctor === d.name"
+                (click)="selectDoctor(d)">
+          <img class="doctor-row-avatar" [src]="'https://i.pravatar.cc/60?img=' + d.avatarId" [alt]="d.name" />
+          <div class="doctor-row-info">
+            <span class="doctor-row-name">{{ d.name }}</span>
+            <span class="doctor-row-spec">{{ d.specialty }}</span>
+          </div>
+          <div class="doctor-row-check" *ngIf="newAppointment.doctor === d.name">
+            <ion-icon name="checkmark-circle"></ion-icon>
+          </div>
+        </button>
+      </div>
+    </div>
+
+    <!-- ── PASO 2: Fecha y Hora ── -->
+    <div *ngIf="currentStep === 2" class="modal-step animate-fade-in">
+      <p class="step-label">Selecciona la fecha</p>
+      <div class="date-input-wrapper">
+        <ion-icon name="calendar-outline" class="date-input-icon"></ion-icon>
+        <input type="date" [(ngModel)]="newAppointment.date" class="date-native-input" [min]="minDate" [max]="maxDate" />
+      </div>
+
+      <p class="step-label" style="margin-top:24px">Selecciona el horario</p>
+      <div class="time-chips-grid">
+        <button type="button" class="time-chip" *ngFor="let t of availableTimes"
+                [class.selected]="newAppointment.time === t"
+                (click)="selectTime(t)">
+          {{ t }}
+        </button>
+      </div>
+    </div>
+
+    <!-- ── PASO 3: Tipo de cita ── -->
+    <div *ngIf="currentStep === 3" class="modal-step animate-fade-in">
+      <p class="step-label">Tipo de consulta</p>
+      <div class="type-cards-row">
+        <button type="button" class="type-card" [class.selected]="newAppointment.type === 'Videollamada'" (click)="selectType('Videollamada')">
+          <div class="type-card-icon video">
+            <ion-icon name="videocam-outline"></ion-icon>
+          </div>
+          <span class="type-card-label">Videollamada</span>
+          <span class="type-card-sub">Desde casa</span>
+          <div class="type-card-check" *ngIf="newAppointment.type === 'Videollamada'">
+            <ion-icon name="checkmark-circle"></ion-icon>
+          </div>
+        </button>
+        <button type="button" class="type-card" [class.selected]="newAppointment.type === 'Consultorio'" (click)="selectType('Consultorio')">
+          <div class="type-card-icon office">
+            <ion-icon name="business-outline"></ion-icon>
+          </div>
+          <span class="type-card-label">Consultorio</span>
+          <span class="type-card-sub">Presencial</span>
+          <div class="type-card-check" *ngIf="newAppointment.type === 'Consultorio'">
+            <ion-icon name="checkmark-circle"></ion-icon>
+          </div>
+        </button>
+      </div>
+
+      <!-- Resumen de la cita -->
+      <div class="summary-box" *ngIf="newAppointment.doctor">
+        <p class="summary-title">Resumen de tu cita</p>
+        <div class="summary-row">
+          <ion-icon name="person-outline"></ion-icon>
+          <span>{{ newAppointment.doctor }}</span>
+        </div>
+        <div class="summary-row">
+          <ion-icon name="medical-outline"></ion-icon>
+          <span>{{ newAppointment.specialty }}</span>
+        </div>
+        <div class="summary-row">
+          <ion-icon name="calendar-outline"></ion-icon>
+          <span>{{ newAppointment.date }}</span>
+        </div>
+        <div class="summary-row">
+          <ion-icon name="time-outline"></ion-icon>
+          <span>{{ newAppointment.time }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- BOTONES DE NAVEGACIÓN -->
+    <div class="modal-nav-row">
+      <button type="button" class="modal-back-btn" *ngIf="currentStep > 1" (click)="prevStep()">
+        <ion-icon name="chevron-back-outline"></ion-icon>
+        Atrás
+      </button>
+      <button type="button" class="modal-next-btn"
+              *ngIf="currentStep < 3"
+              [disabled]="(currentStep === 1 && !canAdvanceStep1()) || (currentStep === 2 && !canAdvanceStep2())"
+              (click)="nextStep()">
+        Siguiente
+        <ion-icon name="chevron-forward-outline"></ion-icon>
+      </button>
+      <button type="button" class="modal-save-btn"
+              *ngIf="currentStep === 3"
+              [disabled]="!canSave()"
+              (click)="saveAppointment()">
+        <ion-icon name="checkmark-outline"></ion-icon>
+        Confirmar Cita
+      </button>
+    </div>
+
+  </div>
+</div>

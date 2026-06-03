@@ -1,0 +1,185 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar class="transparent-header">
+    <ion-title class="header-title">Actividad Diaria</ion-title>
+    <ion-buttons slot="end">
+      <ion-button class="notif-btn">
+        <ion-icon name="notifications-outline" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="app-content">
+  <!-- SECCIÓN HÉROE OSCURA CON CUADRÍCULA -->
+  <div class="hero-section">
+    <div class="hero-welcome">
+      <span class="hero-subtitle">EJERCICIOS SUAVES Y GUIADOS</span>
+      <h1 class="hero-title">Cuida tu movilidad</h1>
+    </div>
+
+    <!-- TARJETA TRANSLÚCIDA DE BIENESTAR (GLASSMORPHISM) -->
+    <div class="wellness-glass-card">
+      <div class="wellness-header">
+        <div class="wellness-logo">
+          <ion-icon name="heart-half-outline" class="wellness-icon"></ion-icon>
+          <span>TU BIENESTAR DIARIO</span>
+        </div>
+        <span class="wellness-badge">En marcha</span>
+      </div>
+
+      <div class="wellness-stats-row">
+        <div class="wellness-stat">
+          <span class="stat-number">{{ rachaDias }}</span>
+          <span class="stat-lbl">Días seguidos</span>
+        </div>
+        <div class="divider-line"></div>
+        <div class="wellness-stat">
+          <span class="stat-number points">{{ puntosBienestar }}</span>
+          <span class="stat-lbl">Puntos Spark</span>
+        </div>
+      </div>
+
+      <div class="wellness-footer-text">
+        <ion-icon name="sparkles" color="warning"></ion-icon>
+        <span>Completa rutinas para acumular más puntos y logros</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECCIÓN PRINCIPAL BLANCA QUE SUBE -->
+  <div class="main-card-section">
+    <!-- CELEBRACIÓN DE LOGRO DINÁMICA -->
+    <div class="celebration-banner" *ngIf="mostrarFelicitaciones" (click)="cerrarFelicitacion()">
+      <div class="celebration-content">
+        <div class="star-icon-box">
+          <ion-icon name="trophy"></ion-icon>
+        </div>
+        <div class="celebration-text">
+          <h3>¡Excelente trabajo!</h3>
+          <p>Has completado las 3 series de hoy. Ganaste <strong>+70 puntos</strong> y sumaste 1 día a tu racha.</p>
+        </div>
+        <ion-button fill="clear" color="success" class="close-cel-btn">
+          <ion-icon name="close-circle"></ion-icon>
+        </ion-button>
+      </div>
+    </div>
+
+    <div class="section-intro">
+      <h2 class="main-section-title">Rutinas recomendadas</h2>
+      <p class="main-section-desc">Movimientos lentos y controlados diseñados para aliviar la rigidez muscular y mejorar tu postura de forma segura.</p>
+    </div>
+
+    <!-- TARJETA DEL PLAN DE RIGIDEZ -->
+    <div class="plan-card">
+      <div class="plan-indicator">
+        <ion-icon name="fitness-outline" class="indicator-icon"></ion-icon>
+      </div>
+      <div class="plan-info">
+        <h3>Plan de movilidad: Rigidez leve</h3>
+        <p>Sesiones de 5-10 minutos con pausas recomendadas de 15 segundos entre series.</p>
+      </div>
+    </div>
+
+    <!-- SELECTOR DE CATEGORÍAS TIPO CHIPS HORIZONTALES -->
+    <div class="categories-scroll-wrapper">
+      <div class="category-chip" 
+           [class.active]="categoriaActiva === 'cervical'" 
+           (click)="seleccionarCategoria('cervical')">
+        <ion-icon name="accessibility-outline"></ion-icon>
+        <span>Cervical</span>
+      </div>
+      <div class="category-chip" 
+           [class.active]="categoriaActiva === 'hombros'" 
+           (click)="seleccionarCategoria('hombros')">
+        <ion-icon name="body-outline"></ion-icon>
+        <span>Hombros</span>
+      </div>
+      <div class="category-chip" 
+           [class.active]="categoriaActiva === 'manos'" 
+           (click)="seleccionarCategoria('manos')">
+        <ion-icon name="hand-right-outline"></ion-icon>
+        <span>Coordinación</span>
+      </div>
+    </div>
+
+    <!-- RUTA INTERACTIVA DEL DÍA -->
+    <div class="routine-details-container">
+      <div class="routine-card-header">
+        <div class="badge-row">
+          <span class="difficulty-tag" [class.inter]="rutinaActual.difficulty === 'Intermedio'">
+            {{ rutinaActual.difficulty }}
+          </span>
+          <span class="duration-tag">
+            <ion-icon name="time-outline"></ion-icon> {{ rutinaActual.duration }}
+          </span>
+        </div>
+        <h2 class="routine-main-title">{{ rutinaActual.title }}</h2>
+        <p class="routine-main-subtitle">{{ rutinaActual.subtitle }}</p>
+      </div>
+
+      <!-- BARRA DE PROGRESO DE SERIES INTERACTIVA -->
+      <div class="routine-progress-box">
+        <div class="progress-info-row">
+          <span class="prog-label">Progreso de hoy:</span>
+          <span class="prog-count" [class.completed]="rutinaCompletada">
+            {{ seriesCompleted }} de {{ maxSeries }} series
+          </span>
+        </div>
+        <div class="progress-bar-track">
+          <div class="progress-bar-fill" 
+               [class.completed]="rutinaCompletada" 
+               [style.width.%]="(seriesCompleted / maxSeries) * 100">
+          </div>
+        </div>
+      </div>
+
+      <!-- DESCRIPCIÓN Y PASOS DE LA RUTINA -->
+      <div class="routine-body-info">
+        <div class="routine-info-block">
+          <h4 class="block-title">Objetivo</h4>
+          <p class="block-desc">{{ rutinaActual.target }}</p>
+        </div>
+
+        <div class="routine-info-block">
+          <h4 class="block-title">Pasos guiados</h4>
+          <ol class="steps-ordered-list">
+            <li *ngFor="let step of rutinaActual.steps; let i = index">
+              <span class="step-num">{{ i + 1 }}</span>
+              <p class="step-text">{{ step }}</p>
+            </li>
+          </ol>
+        </div>
+
+        <div class="routine-info-block alert-block">
+          <div class="alert-header">
+            <ion-icon name="alert-circle" color="warning"></ion-icon>
+            <h4>Precauciones</h4>
+          </div>
+          <p class="alert-text">{{ rutinaActual.precautions }}</p>
+        </div>
+      </div>
+
+      <!-- BOTONES DE ACCIÓN INTERACTIVA -->
+      <div class="action-buttons-row">
+        <ion-button expand="block" 
+                    color="primary" 
+                    class="action-btn-main" 
+                    (click)="completarSerie()" 
+                    *ngIf="!rutinaCompletada">
+          <ion-icon name="checkmark-circle-outline" slot="start"></ion-icon>
+          Registrar Serie Completada
+        </ion-button>
+
+        <ion-button expand="block" 
+                    color="success" 
+                    fill="outline"
+                    class="action-btn-secondary" 
+                    (click)="reiniciarRutina()" 
+                    *ngIf="rutinaCompletada">
+          <ion-icon name="refresh-outline" slot="start"></ion-icon>
+          Practicar de Nuevo
+        </ion-button>
+      </div>
+    </div>
+  </div>
+</ion-content>
